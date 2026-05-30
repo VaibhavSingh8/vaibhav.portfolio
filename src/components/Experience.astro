@@ -1,0 +1,165 @@
+---
+import { experience } from '../data/experience';
+---
+
+<section id="experience">
+  <h2 class="section">Experience</h2>
+  <div class="rows">
+    {experience.map((e) => (
+      <div class="row-item" data-expand>
+        <div class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+          </svg>
+        </div>
+        <div>
+          <div class="org">{e.org}</div>
+          <div class="title">{e.title}</div>
+          <div class="sub">
+            <span>{e.type}</span>
+            <span class="sep">·</span>
+            <span>{e.period}</span>
+          </div>
+          <div class="tags">
+            {e.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+          <div class="expand">
+            <div>
+              <p set:html={e.description} />
+            </div>
+          </div>
+        </div>
+        <svg class="caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>import '../scripts/expandable.ts'</script>
+
+<style>
+  section {
+    margin-top: 36px;
+    scroll-margin-top: 80px;
+  }
+  h2.section {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: 32px;
+    letter-spacing: -0.015em;
+    margin: 0 0 16px;
+  }
+  .row-item {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule-2);
+    cursor: pointer;
+  }
+  .row-item:last-child {
+    border-bottom: none;
+  }
+  .ico {
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: var(--ink-3);
+    background: var(--card);
+    border: 1px solid var(--rule);
+    margin-top: 2px;
+  }
+  .ico svg {
+    width: 10px;
+    height: 10px;
+  }
+  .title {
+    font-weight: 600;
+    font-size: 14.5px;
+  }
+  .sub {
+    font-family: "JetBrains Mono", monospace;
+    color: var(--ink-3);
+    font-size: 12px;
+    margin-top: 2px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .sub .sep {
+    color: var(--ink-3);
+  }
+  .tags {
+    margin-top: 10px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    color: var(--ink-2);
+    background: color-mix(in oklab, var(--card) 80%, transparent);
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .tag:hover {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .caret {
+    align-self: start;
+    margin-top: 6px;
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: transform 0.25s;
+  }
+  .row-item.open .caret {
+    transform: rotate(180deg);
+  }
+  .org {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-3);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+  }
+  .org::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--ink-3);
+  }
+  .expand {
+    grid-column: 2 / -1;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .expand > div {
+    overflow: hidden;
+  }
+  .row-item.open .expand {
+    grid-template-rows: 1fr;
+  }
+  .expand p {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    margin: 10px 0 0;
+    max-width: 62ch;
+  }
+</style>
