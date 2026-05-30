@@ -1,0 +1,46 @@
+<div class="quote">
+  <span class="mark">&ldquo;</span>
+  The details are not the details.<br />They make the design.
+  <div class="author">Charles Eames</div>
+</div>
+
+<style>
+  .quote {
+    text-align: center;
+    padding: 52px 20px;
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--ink);
+    position: relative;
+  }
+  .quote .mark {
+    font-family: "Instrument Serif", serif;
+    font-style: normal;
+    font-size: 64px;
+    line-height: 0;
+    color: var(--ink-3);
+    display: block;
+    margin-bottom: 28px;
+  }
+  .author {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 24px;
+  }
+  .author::before,
+  .author::after {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: var(--ink-3);
+  }
+</style>
