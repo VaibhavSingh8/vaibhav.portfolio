@@ -1,0 +1,217 @@
+---
+import { projects } from '../data/projects';
+---
+
+<section id="projects">
+  <h2 class="section">Projects</h2>
+  <div class="projects">
+    {projects.map((p) => (
+      <article class="proj" data-id={p.id}>
+        <div class="thumb">
+          <span class="badge">{p.badge}</span>
+          {p.thumbLabel}
+        </div>
+        <div class="body">
+          <div class="kicker">{p.kicker}</div>
+          <h3>{p.title}</h3>
+          <p>{p.description}</p>
+          <div class="actions">
+            {p.links.map((l) => (
+              <a href={l.href} class="chip">{l.label}</a>
+            ))}
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>import '../scripts/motion-lightbox.ts'</script>
+
+<style>
+  section {
+    margin-top: 36px;
+    scroll-margin-top: 80px;
+  }
+  h2.section {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: 32px;
+    letter-spacing: -0.015em;
+    margin: 0 0 16px;
+  }
+  .projects {
+    display: grid;
+    gap: 14px;
+  }
+  .proj {
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 18px;
+    padding: 18px;
+    border: 1px solid var(--rule);
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    transition:
+      transform 0.2s,
+      border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .proj:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--accent) 50%, var(--rule));
+  }
+  .proj::after {
+    content: "";
+    position: absolute;
+    inset: auto -1px -1px auto;
+    width: 40px;
+    height: 40px;
+    background: repeating-linear-gradient(
+      135deg,
+      var(--hatch) 0 4px,
+      transparent 4px 8px
+    );
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    opacity: 0.5;
+  }
+  .thumb {
+    aspect-ratio: 4/3;
+    border-radius: 10px;
+    background-color: var(--bg-2);
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--hatch) 0 6px,
+      transparent 6px 12px
+    );
+    border: 1px solid var(--rule);
+    position: relative;
+    display: grid;
+    place-items: center;
+    color: var(--ink-3);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    overflow: hidden;
+  }
+  .thumb .badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 3px 8px;
+    font-size: 10.5px;
+    background: var(--bg);
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+  }
+  h3 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: 22px;
+    margin: 2px 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .kicker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  p {
+    color: var(--ink-2);
+    font-size: 13.5px;
+    margin: 8px 0 10px;
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .actions .chip {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    padding: 5px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--ink-2);
+    text-decoration: none;
+    transition:
+      border-color 0.2s,
+      color 0.2s,
+      background 0.2s;
+  }
+  .actions .chip:hover {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  /* proj-opened — card keeps its scope attr when moved into overlay */
+  .proj.proj-opened {
+    grid-template-columns: 1fr !important;
+    padding: 28px !important;
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.3);
+  }
+  .proj.proj-opened .thumb {
+    height: 280px;
+    aspect-ratio: unset;
+  }
+
+  @media (max-width: 680px) {
+    .proj {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<!-- proj-overlay is appended to body by JS so these must be global -->
+<style is:global>
+  .proj-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    background: color-mix(in oklab, var(--bg) 86%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    padding: 48px 24px;
+    overflow-y: auto;
+  }
+  .proj-overlay.open {
+    display: block;
+  }
+  .proj-overlay .stage {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+  .proj-overlay .close {
+    position: fixed;
+    top: 18px;
+    right: 22px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+  .proj-overlay .close:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: transparent;
+  }
+</style>
