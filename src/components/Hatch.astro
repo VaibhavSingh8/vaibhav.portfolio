@@ -1,0 +1,96 @@
+---
+interface Props {
+  mark: string;
+  label: string;
+}
+const { mark, label } = Astro.props;
+---
+
+<div class="hatch" data-mark={mark} aria-hidden="true">
+  <span class="glyph">{label}</span>
+</div>
+
+<style>
+  .hatch {
+    position: relative;
+    height: 28px;
+    margin: 52px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    color: var(--ink-3);
+  }
+  .hatch::before,
+  .hatch::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background-image: linear-gradient(
+      to right,
+      var(--rule) 50%,
+      transparent 50%
+    );
+    background-size: 6px 1px;
+    background-repeat: repeat-x;
+  }
+  .hatch .glyph {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    color: var(--ink-3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 2px;
+  }
+  .hatch .glyph::before,
+  .hatch .glyph::after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border: 1px solid var(--ink-3);
+    transform: rotate(45deg);
+  }
+  .hatch[data-mark="01"] .glyph::before,
+  .hatch[data-mark="01"] .glyph::after {
+    border-radius: 0;
+  }
+  .hatch[data-mark="02"] .glyph::before,
+  .hatch[data-mark="02"] .glyph::after {
+    border-radius: 999px;
+    transform: none;
+  }
+  .hatch[data-mark="03"] .glyph::before,
+  .hatch[data-mark="03"] .glyph::after {
+    background: var(--ink-3);
+  }
+  .hatch[data-mark="04"] .glyph::before,
+  .hatch[data-mark="04"] .glyph::after {
+    transform: rotate(0deg);
+    background: none;
+    border-color: var(--ink-3);
+  }
+  .hatch[data-mark="05"] .glyph::before,
+  .hatch[data-mark="05"] .glyph::after {
+    background: var(--accent);
+    border-color: transparent;
+  }
+  .hatch.striped {
+    height: 22px;
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--hatch) 0 6px,
+      transparent 6px 12px
+    );
+    border-top: 1px solid var(--rule-2);
+    border-bottom: 1px solid var(--rule-2);
+    margin: 48px 0;
+    display: block;
+  }
+  .hatch.striped::before,
+  .hatch.striped::after,
+  .hatch.striped .glyph {
+    display: none;
+  }
+</style>
