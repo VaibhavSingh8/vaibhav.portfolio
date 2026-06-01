@@ -123,11 +123,9 @@ function toggleTheme() {
 
 themeBtn?.addEventListener('click', toggleTheme);
 
-const savedTheme = localStorage.getItem('portfolio-theme');
-if (savedTheme) {
-  document.documentElement.dataset['theme'] = savedTheme;
-  applyAccent(state.accentHue);
-}
+const savedTheme = localStorage.getItem('portfolio-theme') ?? 'dark';
+document.documentElement.dataset['theme'] = savedTheme;
+applyAccent(state.accentHue);
 
 /* tweaks panel */
 const tweaksEl = document.getElementById('tweaks');
