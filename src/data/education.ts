@@ -6,13 +6,8 @@ export interface EducationEntry {
 
 export const education: EducationEntry[] = [
   {
-    org: 'Institute of Applied Maths',
-    title: 'M.Sc. · Computational Systems',
-    period: '2019 — 2021',
-  },
-  {
-    org: 'Northbrook Technical',
-    title: 'B.Eng. · Software & Systems',
-    period: '2015 — 2019',
+    org: 'KIET Group of Institutions',
+    title: 'B.Tech · Mechanical Engineering',
+    period: '2018 — 2022',
   },
 ];

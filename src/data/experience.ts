@@ -9,30 +9,21 @@ export interface ExperienceEntry {
 
 export const experience: ExperienceEntry[] = [
   {
-    org: 'Independent',
-    title: 'Engineer & maker',
-    type: 'Self-employed',
-    period: '06.2025 — Present',
-    tags: ['Rust', 'TypeScript', 'WebGPU', 'Postgres', 'Swift'],
+    org: 'DataPOEM',
+    title: 'Software Engineer',
+    type: 'Full-time',
+    period: '03.2025 — Present',
+    tags: ['React', 'TypeScript', 'Python', 'FastAPI', 'Temporal', 'PostgreSQL'],
     description:
-      'Shipping <em>sous/chef</em> and small client engagements. Mostly runtime and tool-use work for teams who want their ML pipeline to fit in one head.',
+      'Platform owner across 5-6 live products and 10 enterprise clients. Built frontend for a chat-based AI analytics platform, co-architected an MLOps automation platform on Temporal.io reducing pipeline execution from 1-2 days to a few hours, led Java to FastAPI migration shipping 100+ APIs in under 2 months, and resolved 9 OWASP vulnerabilities ahead of external pen testing.',
   },
   {
-    org: 'Runloop',
-    title: 'Senior Engineer · Platform',
+    org: 'TCS',
+    title: 'Systems Engineer',
     type: 'Full-time',
-    period: '03.2023 — 05.2025',
-    tags: ['Go', 'Kubernetes', 'gRPC', 'Temporal'],
+    period: '08.2022 — 03.2025',
+    tags: ['React', 'JavaScript', 'Azure', 'Docker'],
     description:
-      'Led the evaluations platform: sandboxed execution, streaming logs, and a UI for comparing model runs side-by-side. Took the p95 from 9s to 300ms.',
-  },
-  {
-    org: 'Mezzanine Labs',
-    title: 'Founding Engineer',
-    type: 'Full-time',
-    period: '09.2021 — 02.2023',
-    tags: ['TypeScript', 'React', 'Postgres', 'Design systems'],
-    description:
-      "Zero to first paying cohort. Owned the design system, the billing stack, and the onboarding flow — which, if you've been in a seed-stage startup, is the whole company.",
+      'Built frontend for a multilingual document translation tool. Supported 5+ enterprise data science teams on Azure and Domino Data Labs, improving system uptime by 20%.',
   },
 ];

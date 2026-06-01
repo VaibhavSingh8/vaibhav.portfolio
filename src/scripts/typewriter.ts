@@ -1,10 +1,10 @@
 const tw = document.getElementById('typewriter');
 if (tw) {
   const phrases = [
-    'Systems · ML · Interfaces',
-    'Builds quiet tools.',
-    'Shipping sous/chef.',
-    'Also makes espresso.',
+    'UI · Agents · Systems',
+    'Builds fast. Breaks things. Fixes them.',
+    'Makes things ship on Friday.',
+    'Also makes chai.',
   ];
   let pi = 0;
   let ci = 0;

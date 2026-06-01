@@ -34,7 +34,7 @@ export const connectLinks: ConnectLink[] = [
   },
   {
     label: 'Mail',
-    href: 'mailto:ren@alvaro.dev',
+    href: 'vaibhavsinghr.08@gmail.com',
     paths: ['M2 5h20v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5Z', 'm3 6 9 7 9-7'],
     filled: false,
   },
