@@ -26,28 +26,24 @@
       <span class="arrow">→</span>
       <span class="v">AI tools &amp; APIs</span>
       <span class="detail">claude · gpt · building &amp; breaking things</span>
-      <span class="t">side-quest</span>
     </div>
     <div class="row">
       <span class="k">building</span>
       <span class="arrow">→</span>
       <span class="v">prompt manager</span>
       <span class="detail">carry context across AIs · chrome ext</span>
-      <span class="t">wip</span>
     </div>
     <div class="row">
       <span class="k">training</span>
       <span class="arrow">→</span>
       <span class="v">badminton &middot; gym</span>
       <span class="detail">gym 5&times; · badminton 2&times;</span>
-      <span class="t">court</span>
     </div>
     <div class="row">
       <span class="k">listening</span>
       <span class="arrow">→</span>
       <span class="v">lofi work music</span>
       <span class="detail">always on · no distractions</span>
-      <span class="t">on loop</span>
     </div>
   </div>
 </section>
@@ -58,8 +54,8 @@
     scroll-margin-top: 80px;
   }
   h2.section {
-    font-family: "Instrument Serif", serif;
-    font-weight: 400;
+    font-family: var(--font-display);
+    font-weight: 600;
     font-size: 32px;
     letter-spacing: -0.015em;
     margin: 0 0 16px;
@@ -72,7 +68,7 @@
     gap: 14px;
   }
   ul.bullets li {
-    font-family: "JetBrains Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 13.5px;
     line-height: 1.7;
     color: var(--ink-2);
@@ -94,16 +90,19 @@
     border-radius: 14px;
     background: var(--card);
     overflow: hidden;
+    display: grid;
+    grid-template-columns: 90px 16px 1fr auto;
   }
   .currently .row {
     display: grid;
-    grid-template-columns: 90px 16px 1fr auto auto;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
     align-items: center;
     gap: 10px;
     padding: 13px 18px;
     border-bottom: 1px solid var(--rule-2);
     transition: background 0.2s;
-    font-family: "JetBrains Mono", monospace;
+    font-family: var(--font-mono);
     font-size: 12.5px;
   }
   .currently .row:last-child {
@@ -124,8 +123,9 @@
     font-size: 13px;
   }
   .currently .v {
-    font-family: "Instrument Serif", serif;
+    font-family: var(--font-display);
     font-style: italic;
+    font-weight: 500;
     font-size: 18px;
     color: var(--ink);
     letter-spacing: -0.01em;
@@ -136,23 +136,12 @@
     color: var(--ink-3);
     white-space: nowrap;
   }
-  .currently .t {
-    font-size: 10px;
-    color: var(--ink-3);
-    padding: 2px 8px;
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
   @media (max-width: 640px) {
     .currently .row {
-      grid-template-columns: 1fr auto;
+      grid-template-columns: 1fr;
       grid-template-rows: auto auto;
     }
     .currently .k { grid-column: 1; grid-row: 1; }
-    .currently .t { grid-column: 2; grid-row: 1; }
     .currently .arrow { display: none; }
     .currently .v { grid-column: 1; grid-row: 2; font-size: 16px; }
     .currently .detail { display: none; }
