@@ -24,7 +24,6 @@ src/
 │   ├── Connect.astro         # Social/contact chip links
 │   ├── Hatch.astro           # Section dividers (prop-driven)
 │   ├── Stack.astro           # Marquee tech stack carousel
-│   ├── ContribGrid.astro     # GitHub-style contribution heatmap
 │   ├── Projects.astro        # Data-driven project cards + FLIP lightbox
 │   ├── Experience.astro      # Expandable work history rows
 │   ├── Education.astro       # Education rows
@@ -42,7 +41,6 @@ src/
     ├── meteors.ts            # Canvas star + meteor animation
     ├── typewriter.ts         # Tagline phrase cycling
     ├── carousel.ts           # Builds stack chips from data
-    ├── contrib-grid.ts       # Seeded RNG heatmap + tooltips
     ├── expandable.ts         # [data-expand] row click handler
     ├── interactions.ts       # Magnetic hover, chip ripple, view counter
     ├── motion-hero.ts        # Letter stagger on hero name
@@ -65,5 +63,5 @@ src/
 - **CSS**: Scoped `<style>` per component. Only CSS vars, resets, and global overlays live in `Layout.astro`.
 - **JS**: All client-side logic lives in `src/scripts/*.ts` and is imported by the component that owns it.
 - **Content**: Edit `src/data/*.ts` to update projects, experience, education, stack, and links — no touching component HTML needed.
-- **Dynamic DOM**: Components where JS creates elements at runtime (Stack, ContribGrid) wrap those selectors in `:global()` inside their scoped style block.
+- **Dynamic DOM**: Components where JS creates elements at runtime (e.g. Stack) wrap those selectors in `:global()` inside their scoped style block.
 - **Motion v12**: Uses `ease` (not `easing`), `startDelay` (not `start`), and `transform` as CSS string arrays. Lightbox uses FLIP via `animate(...).finished`.

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Personal portfolio site for Vaibhav Singh. Built with Astro v6, TypeScript (strict), Motion v12, and pnpm. One static page (`/`) composed from 13 components.
+Personal portfolio site for Vaibhav Singh. Built with Astro v6, TypeScript (strict), Motion v12, and pnpm. One static page (`/`) composed from 12 components.
 
 ## Environment
 
@@ -43,7 +43,6 @@ src/
 | `About.astro` | Bio bullets, currently widget cards |
 | `Connect.astro` | Social chip links, buildstrip |
 | `Stack.astro` | Three-row marquee carousel |
-| `ContribGrid.astro` | GitHub-style contribution heatmap |
 | `Projects.astro` | Project cards + FLIP lightbox overlay |
 | `Experience.astro` | Expandable work history rows |
 | `Education.astro` | Education rows |
@@ -69,7 +68,6 @@ Each script is imported by exactly one component (or Layout):
 | `theme.ts` | `Nav.astro` |
 | `typewriter.ts`, `motion-hero.ts` | `Hero.astro` |
 | `carousel.ts` | `Stack.astro` |
-| `contrib-grid.ts` | `ContribGrid.astro` |
 | `motion-lightbox.ts` | `Projects.astro` |
 | `expandable.ts` | `Experience.astro` |
 | `ambient.ts`, `meteors.ts`, `interactions.ts`, `motion-reveal.ts` | `Layout.astro` |
@@ -79,9 +77,9 @@ Each script is imported by exactly one component (or Layout):
 ### CSS
 
 - Use scoped `<style>` blocks — one per component.
-- `Layout.astro` holds only: CSS custom properties (`:root`, `[data-theme="dark"]`), `*`/`html`/`body` resets, `.theme-wipe`, `.frame`, `.ambient`, `.meteors`, `main`, `.dot-grid`, `.tip`, `.tweaks`.
+- `Layout.astro` holds only: CSS custom properties (`:root`, `[data-theme="dark"]`), `*`/`html`/`body` resets, `.theme-wipe`, `.frame`, `.ambient`, `.meteors`, `main`, `.dot-grid`, `.tweaks`.
 - Do not add component-specific CSS to `Layout.astro`.
-- For elements created by JS at runtime (e.g. carousel chips, contrib grid cells), wrap the selectors in `:global()` inside the owning component's `<style>` block.
+- For elements created by JS at runtime (e.g. carousel chips), wrap the selectors in `:global()` inside the owning component's `<style>` block.
 - CSS custom properties for theming: `--bg`, `--bg-2`, `--ink`, `--ink-2`, `--ink-3`, `--rule`, `--rule-2`, `--card`, `--accent`, `--accent-ink`, `--shadow`, `--hatch`, `--grid-dot`.
 - Typography lives in three CSS vars, never hardcode a font string in a component: `--font-sans` (Inter — body copy, labels), `--font-mono` (IBM Plex Mono — meta text, tags, terminal-style bits), `--font-display` (Bricolage Grotesque — section headers, hero name, italic accent moments like the "currently" widget values and pull quote).
 - For a repeated-row layout that needs columns to align across rows (see `About.astro`'s `.currently` widget), make the parent `display: grid` with the real column tracks and give each row `grid-template-columns: subgrid; grid-column: 1 / -1`. Do not give each row its own independent `grid-template-columns` — the tracks size per-row instead of sharing one layout, which misaligns content across rows.

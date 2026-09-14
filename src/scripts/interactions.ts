@@ -1,5 +1,5 @@
 /* magnetic hover */
-document.querySelectorAll<HTMLElement>('.nav-a, .chip, .theme-btn, .kbd').forEach((el) => {
+document.querySelectorAll<HTMLElement>('.nav-a, .chip, .theme-btn').forEach((el) => {
   el.addEventListener('pointermove', (e: PointerEvent) => {
     const r = el.getBoundingClientRect();
     const x = e.clientX - (r.left + r.width / 2);
