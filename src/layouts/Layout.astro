@@ -16,102 +16,237 @@
   </head>
   <body>
     <div class="frame" aria-hidden="true"></div>
-    <canvas class="meteors" id="meteors" aria-hidden="true"></canvas>
     <div class="ambient" aria-hidden="true"></div>
     <div class="theme-wipe" id="wipe" aria-hidden="true"></div>
 
     <slot />
 
-    <div class="tweaks" id="tweaks" role="dialog" aria-label="Tweaks">
-      <h4>Tweaks</h4>
-      <div class="row-tw">
-        <label for="wipe-style">Theme wipe</label>
-        <select id="wipe-style">
-          <option value="diag">Diagonal corner&rarr;corner</option>
-          <option value="flat">Flat top &rarr; bottom</option>
-        </select>
-      </div>
-      <div class="row-tw">
-        <label for="accent-hue">Accent hue</label>
-        <input id="accent-hue" type="range" min="0" max="360" value="55" />
-      </div>
-      <div class="row-tw">
-        <label for="sound-on">Click sound</label>
-        <input id="sound-on" type="checkbox" checked />
-      </div>
-    </div>
-
-    <script>import '../scripts/ambient.ts'</script>
-    <script>import '../scripts/meteors.ts'</script>
-    <script>import '../scripts/interactions.ts'</script>
-    <script>import '../scripts/motion-reveal.ts'</script>
+    <script>
+      import "../scripts/ambient.ts";
+    </script>
+    <script>
+      import "../scripts/interactions.ts";
+    </script>
+    <script>
+      import "../scripts/motion-reveal.ts";
+    </script>
   </body>
 </html>
 
 <style is:global>
+  /* ==========================================================
+     1. THEME TOKENS
+     Every colour and size the components use is defined here.
+     Components should never hardcode a colour.
+     ========================================================== */
+
   :root {
+    /* surfaces */
     --bg: #f6f5f0;
     --bg-2: #efede6;
-    --ink: #141414;
-    --ink-2: #3a3a38;
-    --ink-3: #7a7a74;
-    --rule: #1414141a;
-    --rule-2: #1414140e;
     --card: #ffffff;
-    --card-ink: #141414;
     --chip: #ffffff;
-    --chip-br: #14141418;
-    --accent: oklch(0.68 0.14 55);
-    --accent-ink: #6a3d0a;
+    --bg-glow: none; /* extra depth behind the page — dark theme only */
+
+    /* text */
+    --ink: #141414; /* headings + body */
+    --ink-2: #3a3a38; /* secondary copy */
+    --ink-3: #7a7a74; /* meta, labels, captions */
+
+    /* lines + texture */
+    --rule: rgba(20, 20, 20, 0.102); /* visible hairlines */
+    --rule-2: rgba(20, 20, 20, 0.055); /* barely-there dividers */
+    --border-control: #8c8c85; /* borders on buttons + links: WCAG 1.4.11 wants 3:1 */
     --hatch: rgba(20, 20, 20, 0.06);
     --grid-dot: rgba(20, 20, 20, 0.18);
-    --verify: #2b7fff;
+
+    /* accent — warm orange */
+    --accent: #d97e38;
+    --accent-ink: #6a3d0a; /* accent used as text, so it needs contrast */
+    --accent-soft: rgba(217, 126, 56, 0.18); /* cursor glow */
+    --accent-faint: rgba(217, 126, 56, 0.05); /* row hover wash */
+    --accent-edge: rgba(217, 126, 56, 0.55); /* card hover border */
+
+    /* availability dot in the Connect buildstrip */
+    --live: #2ca76c;
+    --live-ring: rgba(44, 167, 108, 0.25);
+
+    /* translucent surfaces (same colour as --bg, just see-through) */
+    --nav-bg: rgba(246, 245, 240, 0.75);
+    --overlay-bg: rgba(246, 245, 240, 0.86);
+    --card-soft: rgba(255, 255, 255, 0.8);
+
     --shadow: 0 1px 0 rgba(20, 20, 20, 0.04), 0 1px 2px rgba(20, 20, 20, 0.04);
+
+    /* layout */
+    --measure: 760px; /* content column width */
+    --gutter: clamp(16px, 4vw, 40px); /* space either side of the content */
+    --frame-inset: clamp(40px, 10vw, 160px); /* where the page rules sit */
+
+    /* type */
     --font-sans: "Inter", system-ui, sans-serif;
     --font-mono: "IBM Plex Mono", monospace;
     --font-display: "Bricolage Grotesque", var(--font-sans);
   }
+
   [data-theme="dark"] {
-    --bg: #0b0b0d;
-    --bg-2: #111115;
+    --bg: #0f0f13;
+    --bg-2: #16161b;
+    --card: #16161c;
+    --chip: #1a1a21;
+    --bg-glow: radial-gradient(
+      1000px 600px at 50% -5%,
+      rgba(244, 162, 92, 0.07),
+      transparent 65%
+    );
+
     --ink: #ededed;
     --ink-2: #b9b9bb;
     --ink-3: #6e6e73;
-    --rule: #ffffff18;
-    --rule-2: #ffffff0c;
-    --card: #121217;
-    --card-ink: #ededed;
-    --chip: #15151b;
-    --chip-br: #ffffff1a;
-    --accent: oklch(0.78 0.13 60);
-    --accent-ink: #f2cfa6;
+
+    --rule: rgba(255, 255, 255, 0.094);
+    --rule-2: rgba(255, 255, 255, 0.047);
+    --border-control: #6a6a73;
     --hatch: rgba(255, 255, 255, 0.05);
     --grid-dot: rgba(255, 255, 255, 0.16);
-    --verify: #4c9bff;
+
+    --accent: #f4a25c;
+    --accent-ink: #f2cfa6;
+    --accent-soft: rgba(244, 162, 92, 0.18);
+    --accent-faint: rgba(244, 162, 92, 0.06);
+    --accent-edge: rgba(244, 162, 92, 0.55);
+
+    --nav-bg: rgba(15, 15, 19, 0.75);
+    --overlay-bg: rgba(15, 15, 19, 0.86);
+    --card-soft: rgba(22, 22, 28, 0.8);
+
     --shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
   }
+
+  /* ==========================================================
+     2. RESET + BASE
+     ========================================================== */
 
   * {
     box-sizing: border-box;
   }
+
   html,
   body {
     margin: 0;
     padding: 0;
   }
+
   body {
-    background: var(--bg);
+    background-color: var(--bg);
+    background-image: var(--bg-glow);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--ink);
     font-family: var(--font-sans);
     font-size: 15px;
     line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
     letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     overflow-x: hidden;
   }
 
-  /* theme wipe overlay — a snapshot of the NEXT theme painted full-screen; we clip it in */
+  /* ==========================================================
+     3. SHARED SECTION LAYOUT
+     Defined once here instead of repeated in every component.
+     ========================================================== */
+
+  main {
+    position: relative;
+    z-index: 2;
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: 24px var(--gutter) 80px;
+  }
+
+  main section {
+    margin-top: 36px;
+    scroll-margin-top: 80px; /* so anchor links clear the sticky nav */
+  }
+
+  main h2.section {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: -0.015em;
+    margin: 0 0 16px;
+  }
+
+  /* ==========================================================
+     4. PAGE DECORATION
+     ========================================================== */
+
+  /* two faint dashed rules running down the page */
+  .frame {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .frame::before,
+  .frame::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px dashed var(--rule);
+  }
+  .frame::before {
+    left: var(--frame-inset);
+  }
+  .frame::after {
+    right: var(--frame-inset);
+  }
+
+  /* dotted block under the nav, faded out at the edges */
+  .dot-grid {
+    height: 140px;
+    background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+    background-size: 12px 12px;
+    border-left: 1px dashed var(--rule);
+    border-right: 1px dashed var(--rule);
+    mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      #000 40%,
+      transparent 80%
+    );
+  }
+
+  /* soft glow that follows the cursor — position comes from ambient.ts */
+  .ambient {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 520px;
+    height: 520px;
+    margin-left: -260px; /* half the width, so it centres on the pointer */
+    margin-top: -260px;
+    transform: translate(var(--mx, 50vw), var(--my, 50vh));
+    will-change: transform;
+    background: radial-gradient(closest-side, var(--accent-soft), transparent 70%);
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 1;
+  }
+  [data-theme="dark"] .ambient {
+    mix-blend-mode: screen;
+    opacity: 0.5;
+  }
+
+  /* ==========================================================
+     5. THEME WIPE
+     A full-screen panel painted in the NEXT theme's background,
+     then clipped open from the toggle button. theme.ts drives it.
+     ========================================================== */
+
   .theme-wipe {
     position: fixed;
     inset: 0;
@@ -134,141 +269,9 @@
     clip-path: inset(0 0 0 0);
   }
 
-  /* page frame — faint vertical rules */
-  .frame {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .frame::before,
-  .frame::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background-image: linear-gradient(
-      to bottom,
-      var(--rule) 50%,
-      transparent 50%
-    );
-    background-size: 1px 6px;
-    background-repeat: repeat-y;
-  }
-  .frame::before {
-    left: clamp(40px, 10vw, 160px);
-  }
-  .frame::after {
-    right: clamp(40px, 10vw, 160px);
-  }
-
-  /* cursor glow */
-  .ambient {
-    position: fixed;
-    pointer-events: none;
-    z-index: 1;
-    width: 520px;
-    height: 520px;
-    left: var(--mx, 50%);
-    top: var(--my, 50%);
-    transform: translate(-50%, -50%);
-    background: radial-gradient(
-      closest-side,
-      color-mix(in oklch, var(--accent) 18%, transparent),
-      transparent 70%
-    );
-    mix-blend-mode: multiply;
-    opacity: 0.55;
-    transition: opacity 0.4s;
-  }
-  [data-theme="dark"] .ambient {
-    mix-blend-mode: screen;
-    opacity: 0.35;
-  }
-
-  /* meteor / stardust canvas — very subtle */
-  .meteors {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.55;
-  }
-  [data-theme="dark"] .meteors {
-    opacity: 0.85;
-  }
-
-  /* main layout */
-  main {
-    position: relative;
-    z-index: 2;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 24px clamp(16px, 4vw, 40px) 80px;
-  }
-
-  /* dotted grid block */
-  .dot-grid {
-    height: 140px;
-    background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
-    background-size: 12px 12px;
-    background-position: 0 0;
-    border-left: 1px dashed var(--rule);
-    border-right: 1px dashed var(--rule);
-    mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(
-      ellipse at center,
-      #000 40%,
-      transparent 80%
-    );
-  }
-
-
-  /* tweaks panel */
-  .tweaks {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 200;
-    background: var(--card);
-    border: 1px solid var(--rule);
-    border-radius: 14px;
-    padding: 12px 14px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    display: none;
-    min-width: 220px;
-  }
-  .tweaks.on {
-    display: block;
-  }
-  .tweaks h4 {
-    margin: 0 0 10px;
-    font: inherit;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-  }
-  .tweaks .row-tw {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin: 8px 0;
-  }
-  .tweaks select,
-  .tweaks input[type="range"] {
-    font: inherit;
-    background: var(--bg-2);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    color: var(--ink);
-    padding: 4px 6px;
-  }
+  /* ==========================================================
+     6. RESPONSIVE + MOTION PREFERENCES
+     ========================================================== */
 
   @media (max-width: 680px) {
     main {
@@ -277,6 +280,17 @@
     .frame::before,
     .frame::after {
       display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 </style>

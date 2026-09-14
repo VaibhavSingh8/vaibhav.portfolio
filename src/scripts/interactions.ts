@@ -20,14 +20,3 @@ document.querySelectorAll<HTMLElement>('.chip').forEach((el) => {
   });
 });
 
-/* view counter jitter */
-const viewsEl = document.getElementById('views');
-if (viewsEl) {
-  let n = 12408;
-  setInterval(() => {
-    if (Math.random() < 0.3) {
-      n += 1;
-      viewsEl.textContent = n.toLocaleString();
-    }
-  }, 2400);
-}

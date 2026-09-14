@@ -22,3 +22,38 @@ document.querySelectorAll<HTMLElement>('.marquee').forEach((m) => {
     .join('');
   row.innerHTML = html;
 });
+
+/* ------------------------------------------------------------------
+   Pause control.
+
+   WCAG 2.2.2 (Pause, Stop, Hide) requires a real mechanism to stop
+   content that moves for more than five seconds. Hover-to-pause does
+   not count — it is unreachable by keyboard and does not exist on
+   touch — so this button is the actual mechanism.
+
+   If the visitor prefers reduced motion we start paused, but leave the
+   button working so they can opt back in.
+   ------------------------------------------------------------------ */
+
+const stack = document.getElementById('stack');
+const toggle = document.getElementById('marquee-toggle');
+const toggleLabel = toggle?.querySelector<HTMLElement>('.label');
+
+if (stack && toggle && toggleLabel) {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+  const setPaused = (paused: boolean) => {
+    stack.dataset['paused'] = String(paused);
+    toggleLabel.textContent = paused ? 'Play' : 'Pause';
+    toggle.setAttribute(
+      'aria-label',
+      paused ? 'Play tech stack animation' : 'Pause tech stack animation',
+    );
+  };
+
+  setPaused(reduced.matches);
+  reduced.addEventListener('change', (e) => setPaused(e.matches));
+  toggle.addEventListener('click', () => {
+    setPaused(stack.dataset['paused'] !== 'true');
+  });
+}

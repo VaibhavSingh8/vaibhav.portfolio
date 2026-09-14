@@ -7,40 +7,10 @@
   </div>
   <div class="hero-id">
     <h1>
-      <span id="name-glitch" data-text="Ren Alvaro">Vaibhav Singh</span>
-      <span class="verified" title="Verified human"
-        ><svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="3"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="m5 12 5 5L20 7"></path></svg
-        ></span
-      >
+      <span id="name-glitch">Vaibhav Singh</span>
     </h1>
     <div class="tagline" id="typewriter">Systems · ML · Interfaces</div>
-    <div class="status">
-      <span class="live"></span><span
-        >online · shipping from Bengaluru</span
-      >
-    </div>
-  </div>
-  <div class="hero-meta">
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-    >
-      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"></path>
-      <circle cx="12" cy="12" r="3"></circle>
-    </svg>
-    <span id="views">12,408</span>
+    <div class="status">shipping from Bengaluru</div>
   </div>
 </div>
 
@@ -50,7 +20,7 @@
 <style>
   .hero {
     display: grid;
-    grid-template-columns: 112px minmax(0, 1fr) auto;
+    grid-template-columns: 112px minmax(0, 1fr);
     gap: 22px;
     align-items: start;
     padding-top: 28px;
@@ -104,18 +74,6 @@
       transform: rotate(360deg);
     }
   }
-  .hero-id .row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .hero-id .mono-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-  }
   .hero-id h1 {
     font-family: var(--font-display);
     font-weight: 600;
@@ -127,20 +85,6 @@
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-  }
-  .verified {
-    width: 20px;
-    height: 20px;
-    color: #fff;
-    background: var(--verify);
-    border-radius: 999px;
-    display: grid;
-    place-items: center;
-    flex: none;
-  }
-  .verified svg {
-    width: 12px;
-    height: 12px;
   }
   .hero-id .tagline {
     font-family: var(--font-mono);
@@ -156,40 +100,10 @@
     color: var(--ink-3);
     margin-top: 6px;
   }
-  .status .live {
-    width: 7px;
-    height: 7px;
-    border-radius: 999px;
-    background: #2ca76c;
-    box-shadow: 0 0 0 0 #2ca76c80;
-    animation: pulse 2s ease-out infinite;
-  }
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 0 0 #2ca76c80;
-    }
-    100% {
-      box-shadow: 0 0 0 10px #2ca76c00;
-    }
-  }
-  .hero-meta {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ink-3);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding-top: 10px;
-    white-space: nowrap;
-  }
 
   @media (max-width: 680px) {
     .hero {
       grid-template-columns: 72px 1fr;
-    }
-    .hero-meta {
-      grid-column: 1/-1;
-      padding-top: 0;
     }
     .avatar {
       width: 72px;

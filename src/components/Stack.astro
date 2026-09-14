@@ -1,8 +1,23 @@
-<section id="stack">
+<section id="stack" data-paused="false">
   <h2 class="section">Tech Stack</h2>
-  <p class="stack-sub">
-    tools I reach for when I&rsquo;m actually shipping.
-  </p>
+  <div class="stack-head">
+    <p class="stack-sub">tools I reach for when I&rsquo;m actually shipping.</p>
+    <button
+      type="button"
+      class="marquee-toggle"
+      id="marquee-toggle"
+      aria-label="Pause tech stack animation"
+    >
+      <svg class="ico-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <rect x="7" y="5" width="3.5" height="14" rx="1"></rect>
+        <rect x="13.5" y="5" width="3.5" height="14" rx="1"></rect>
+      </svg>
+      <svg class="ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5.5v13l11-6.5z"></path>
+      </svg>
+      <span class="label">Pause</span>
+    </button>
+  </div>
 
   <div class="marquee" data-speed="48">
     <div class="track" data-row="1"></div>
@@ -15,22 +30,57 @@
 <script>import '../scripts/carousel.ts'</script>
 
 <style>
-  section {
-    margin-top: 36px;
-    scroll-margin-top: 80px;
-  }
-  h2.section {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 32px;
-    letter-spacing: -0.015em;
-    margin: 0 0 16px;
+  .stack-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: -4px 0 18px;
   }
   .stack-sub {
     font-family: var(--font-mono);
     font-size: 11.5px;
     color: var(--ink-3);
-    margin: -4px 0 18px;
+    margin: 0;
+  }
+
+  /* pause control — WCAG 2.2.2 needs a real, keyboard-reachable mechanism,
+     so hover-to-pause alone is not enough */
+  .marquee-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    padding: 5px 10px;
+    border: 1px solid var(--border-control);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .marquee-toggle:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+  .marquee-toggle:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+  .marquee-toggle svg {
+    width: 11px;
+    height: 11px;
+  }
+  .marquee-toggle .ico-play,
+  #stack[data-paused="true"] .marquee-toggle .ico-pause {
+    display: none;
+  }
+  #stack[data-paused="true"] .marquee-toggle .ico-play {
+    display: block;
   }
   .marquee {
     overflow: hidden;
@@ -64,7 +114,8 @@
   .marquee[data-dir="reverse"] .track {
     animation-direction: reverse;
   }
-  .marquee:hover .track {
+  .marquee:hover .track,
+  #stack[data-paused="true"] .track {
     animation-play-state: paused;
   }
   @keyframes marquee {
@@ -75,6 +126,16 @@
       transform: translateX(-50%);
     }
   }
+  /* the global prefers-reduced-motion rule zeroes every animation, which would
+     make the Play button a no-op. If the user explicitly asks for motion here,
+     honour it. */
+  @media (prefers-reduced-motion: reduce) {
+    #stack[data-paused="false"] .track {
+      animation-duration: calc(var(--speed, 50) * 1s) !important;
+      animation-iteration-count: infinite !important;
+    }
+  }
+
   :global(.stack-chip) {
     display: inline-flex;
     align-items: center;

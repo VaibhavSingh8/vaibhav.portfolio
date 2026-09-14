@@ -41,17 +41,6 @@ import { experience } from '../data/experience';
 <script>import '../scripts/expandable.ts'</script>
 
 <style>
-  section {
-    margin-top: 36px;
-    scroll-margin-top: 80px;
-  }
-  h2.section {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 32px;
-    letter-spacing: -0.015em;
-    margin: 0 0 16px;
-  }
   .row-item {
     display: grid;
     grid-template-columns: 20px 1fr auto;
@@ -107,7 +96,7 @@ import { experience } from '../data/experience';
     border-radius: 999px;
     border: 1px solid var(--rule);
     color: var(--ink-2);
-    background: color-mix(in oklab, var(--card) 80%, transparent);
+    background: var(--card-soft);
     transition:
       background 0.2s,
       border-color 0.2s,

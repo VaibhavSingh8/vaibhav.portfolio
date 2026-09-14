@@ -29,17 +29,6 @@ import { projects } from '../data/projects';
 <script>import '../scripts/motion-lightbox.ts'</script>
 
 <style>
-  section {
-    margin-top: 36px;
-    scroll-margin-top: 80px;
-  }
-  h2.section {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 32px;
-    letter-spacing: -0.015em;
-    margin: 0 0 16px;
-  }
   .projects {
     display: grid;
     gap: 14px;
@@ -61,7 +50,7 @@ import { projects } from '../data/projects';
   }
   .proj:hover {
     transform: translateY(-2px);
-    border-color: color-mix(in oklab, var(--accent) 50%, var(--rule));
+    border-color: var(--accent-edge);
   }
   .proj::after {
     content: "";
@@ -136,7 +125,7 @@ import { projects } from '../data/projects';
     font-family: var(--font-mono);
     font-size: 11.5px;
     padding: 5px 12px;
-    border: 1px solid var(--rule);
+    border: 1px solid var(--border-control);
     border-radius: 999px;
     background: var(--bg);
     color: var(--ink-2);
@@ -176,7 +165,7 @@ import { projects } from '../data/projects';
     inset: 0;
     z-index: 100;
     display: none;
-    background: color-mix(in oklab, var(--bg) 86%, transparent);
+    background: var(--overlay-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     opacity: 0;
@@ -198,7 +187,7 @@ import { projects } from '../data/projects';
     right: 22px;
     width: 36px;
     height: 36px;
-    border: 1px solid var(--rule);
+    border: 1px solid var(--border-control);
     border-radius: 999px;
     background: var(--card);
     color: var(--ink);
