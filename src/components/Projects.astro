@@ -1,22 +1,36 @@
 ---
-import { projects } from '../data/projects';
+import { getCollection } from 'astro:content';
+
+const entries = await getCollection('work', ({ data }) =>
+  import.meta.env.PROD ? !data.draft : true,
+);
+entries.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <section id="projects">
-  <h2 class="section">Projects</h2>
+  <h2 class="section">Selected work</h2>
+  <p class="section-note">
+    Most of my work is behind enterprise SSO, so these are write-ups rather
+    than repositories.
+  </p>
+
   <div class="projects">
-    {projects.map((p) => (
-      <article class="proj" data-id={p.id}>
+    {entries.map((entry) => (
+      <article class="proj">
         <div class="thumb">
-          <span class="badge">{p.badge}</span>
-          {p.thumbLabel}
+          <span class="badge">{entry.data.status}</span>
+          {entry.data.thumbLabel ?? entry.data.title}
         </div>
         <div class="body">
-          <div class="kicker">{p.kicker}</div>
-          <h3>{p.title}</h3>
-          <p>{p.description}</p>
+          <div class="kicker">{entry.data.kicker}</div>
+          <h3>
+            <a href={`/work/${entry.id}`}>{entry.data.title}</a>
+          </h3>
+          <p>{entry.data.summary}</p>
+          <p class="outcome">{entry.data.outcome}</p>
           <div class="actions">
-            {p.links.map((l) => (
+            <a href={`/work/${entry.id}`} class="chip">read case study &rarr;</a>
+            {entry.data.links.map((l) => (
               <a href={l.href} class="chip">{l.label}</a>
             ))}
           </div>
@@ -26,9 +40,13 @@ import { projects } from '../data/projects';
   </div>
 </section>
 
-<script>import '../scripts/motion-lightbox.ts'</script>
-
 <style>
+  .section-note {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+    margin: -8px 0 18px;
+  }
   .projects {
     display: grid;
     gap: 14px;
@@ -96,6 +114,25 @@ import { projects } from '../data/projects';
     color: var(--ink-2);
     border: 1px solid var(--rule);
     border-radius: 999px;
+  }
+  h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  h3 a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  h3 a:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+  .outcome {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--accent-ink);
+    margin: 0 0 10px;
   }
   h3 {
     font-family: var(--font-display);

@@ -1,0 +1,189 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const entries = await getCollection('work', ({ data }) =>
+    import.meta.env.PROD ? !data.draft : true,
+  );
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+};
+
+interface Props {
+  entry: CollectionEntry<'work'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, kicker, outcome, role, period, stack, draft } = entry.data;
+---
+
+<Layout title={`${title} — Vaibhav Singh`} description={entry.data.summary}>
+  <Nav />
+  <main>
+    <article class="case">
+      <a class="back" href="/#projects">&larr; all work</a>
+
+      {draft && <p class="draft-flag">Draft — not included in production builds.</p>}
+
+      <p class="kicker">{kicker}</p>
+      <h1>{title}</h1>
+      <p class="outcome">{outcome}</p>
+
+      <dl class="meta">
+        <div>
+          <dt>Role</dt>
+          <dd>{role}</dd>
+        </div>
+        <div>
+          <dt>When</dt>
+          <dd>{period}</dd>
+        </div>
+        <div>
+          <dt>Stack</dt>
+          <dd>{stack.join(' · ')}</dd>
+        </div>
+      </dl>
+
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+    <Footer />
+  </main>
+</Layout>
+
+<style>
+  .case {
+    padding-top: 28px;
+  }
+  .back {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    text-decoration: none;
+  }
+  .back:hover {
+    color: var(--ink);
+  }
+  .draft-flag {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--accent-ink);
+    background: var(--accent-faint);
+    border: 1px solid var(--accent-edge);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 16px 0 0;
+  }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 24px 0 0;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(30px, 4vw, 40px);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 6px 0 0;
+  }
+  .outcome {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent-ink);
+    margin: 10px 0 0;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 28px 0 0;
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .meta dt {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .meta dd {
+    margin: 4px 0 0;
+    font-size: 13.5px;
+    color: var(--ink-2);
+  }
+
+  /* the markdown body — narrower than the page for readability */
+  .prose {
+    max-width: 42rem;
+    margin-top: 36px;
+  }
+  .prose :global(h2) {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin: 36px 0 12px;
+  }
+  .prose :global(h3) {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 24px 0 8px;
+  }
+  .prose :global(p) {
+    color: var(--ink-2);
+    margin: 0 0 14px;
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    color: var(--ink-2);
+    padding-left: 20px;
+    margin: 0 0 14px;
+  }
+  .prose :global(li) {
+    margin-bottom: 6px;
+  }
+  .prose :global(a) {
+    color: var(--accent-ink);
+  }
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+  .prose :global(pre) {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+    overflow-x: auto;
+  }
+  .prose :global(pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+  .prose :global(blockquote) {
+    border-left: 2px solid var(--rule);
+    margin: 0 0 14px;
+    padding-left: 16px;
+    color: var(--ink-3);
+  }
+</style>

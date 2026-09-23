@@ -1,3 +1,15 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Vaibhav Singh — Software Engineer',
+  description = 'Software engineer with 4 years building production web applications and AI platforms. Based in Bengaluru.',
+} = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -12,7 +24,8 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Bricolage+Grotesque:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap"
     />
     <meta name="generator" content={Astro.generator} />
-    <title>Vaibhav Singh — Software Engineer</title>
+    <meta name="description" content={description} />
+    <title>{title}</title>
   </head>
   <body>
     <div class="frame" aria-hidden="true"></div>
