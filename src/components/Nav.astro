@@ -1,18 +1,12 @@
-<nav class="top">
+<nav class="top" aria-label="Primary">
   <div class="nav-inner">
-    <!-- <a class="brand" href="#"
-      ><span class="dot"></span>vs<span
-        style="color: var(--ink-3); font-weight: 400">/</span
-      >vaibhav</a
-    > -->
-
-    <a class="brand" href="#">vaibhav</a>
+    <a class="brand" href="/">vaibhav</a>
 
     <div class="nav-links">
-      <a href="#about" class="nav-a active">Home</a>
-      <a href="#projects" class="nav-a">Projects</a>
-      <a href="#writing" class="nav-a">Writing</a>
-      <a href="#more" class="nav-a">More</a>
+      <a href="/#projects" class="nav-a">Work</a>
+      <a href="/#experience" class="nav-a">Experience</a>
+      <a href="/#about" class="nav-a">About</a>
+      <a href="/#connect" class="nav-a">Contact</a>
     </div>
     <button class="theme-btn" id="theme" aria-label="Toggle theme">
       <svg
@@ -78,13 +72,6 @@
     text-decoration: none;
     color: var(--ink);
   }
-  .brand .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    background: var(--accent);
-    display: inline-block;
-  }
   .nav-links {
     display: flex;
     align-items: center;
@@ -105,18 +92,6 @@
   .nav-links a:hover {
     color: var(--ink);
     background: var(--rule-2);
-  }
-  .nav-links a.active {
-    color: var(--ink);
-  }
-  .nav-links a.active::after {
-    content: "";
-    position: absolute;
-    left: 12px;
-    right: 12px;
-    bottom: 4px;
-    height: 1px;
-    background: var(--ink);
   }
   .theme-btn {
     width: 38px;
