@@ -1,55 +1,59 @@
-<div class="hero">
-  <div class="avatar">
+<header class="hero">
+  <div class="avatar" aria-hidden="true">
     <span class="ring"></span>
-    <span class="monogram"
-      >v<span style="color: var(--accent-ink)">s</span></span
-    >
+    <span class="monogram">v<span class="s">s</span></span>
   </div>
   <div class="hero-id">
-    <h1>
-      <span id="name-glitch">Vaibhav Singh</span>
-    </h1>
-    <p class="tagline">Fullstack engineer · React, Next.js, Python, FastAPI · data-heavy B2B AI products</p>
-    <p class="status">shipping from Bengaluru</p>
+    <h1><span id="name-glitch">Vaibhav Singh</span></h1>
+    <p class="lede">
+      Fullstack engineer building data-heavy B2B AI products, from the
+      interfaces people plan in to the services behind them.
+    </p>
+    <p class="meta">
+      <span>Software Engineer at DataPOEM</span>
+      <span aria-hidden="true">/</span>
+      <span>4+ years</span>
+      <span aria-hidden="true">/</span>
+      <span>shipping from Bengaluru</span>
+    </p>
+    <div class="actions">
+      <a class="btn primary" href="/work/ai-planning-workspace">Read the main case study</a>
+      <a class="btn" href="/#connect">Get in touch</a>
+    </div>
   </div>
-</div>
+</header>
 
 <script>import '../scripts/motion-hero.ts'</script>
 
 <style>
   .hero {
     display: grid;
-    grid-template-columns: 112px minmax(0, 1fr);
-    gap: 22px;
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 28px;
     align-items: start;
     padding-top: 28px;
   }
-  .hero-id {
-    min-width: 0;
-    padding-top: 8px;
-  }
   .avatar {
-    width: 112px;
-    height: 112px;
+    width: 104px;
+    height: 104px;
     border-radius: 14px;
     border: 1px solid var(--rule);
     background: var(--card);
-    overflow: hidden;
     position: relative;
-    box-shadow: var(--shadow);
     display: grid;
     place-items: center;
+    margin-top: 6px;
   }
   .avatar::after {
     content: "";
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     background-image: repeating-linear-gradient(
       45deg,
       var(--hatch) 0 4px,
       transparent 4px 10px
     );
-    opacity: 0.7;
   }
   .avatar .monogram {
     position: relative;
@@ -57,15 +61,18 @@
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 600;
-    font-size: 58px;
+    font-size: 52px;
     color: var(--ink);
     letter-spacing: -0.04em;
   }
+  .avatar .s {
+    color: var(--accent-ink);
+  }
   .avatar .ring {
     position: absolute;
-    inset: -6px;
+    inset: -7px;
     border: 1px dashed var(--rule);
-    border-radius: 16px;
+    border-radius: 18px;
     animation: spin 40s linear infinite;
   }
   @keyframes spin {
@@ -73,38 +80,72 @@
       transform: rotate(360deg);
     }
   }
-  .hero-id h1 {
+  .hero-id {
+    min-width: 0;
+  }
+  h1 {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(34px, 4.4vw, 46px);
-    letter-spacing: -0.02em;
-    margin: 2px 0 8px;
+    font-size: clamp(36px, 5vw, 48px);
+    letter-spacing: -0.025em;
     line-height: 1.05;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .hero-id .tagline {
-    font-family: var(--font-mono);
-    color: var(--ink-2);
-    font-size: 13px;
     margin: 0;
-    max-width: 52ch;
   }
-  .status {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .lede {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 14px 0 0;
+    max-width: 34em;
+    text-wrap: pretty;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
     font-family: var(--font-mono);
     font-size: 12px;
     color: var(--ink-3);
-    margin: 6px 0 0;
+    margin: 12px 0 0;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border-control);
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+  .btn:hover {
+    border-color: var(--ink);
+  }
+  .btn.primary {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+  .btn.primary:hover {
+    background: var(--ink-2);
+    border-color: var(--ink-2);
   }
 
-  @media (max-width: 680px) {
+  @media (max-width: 560px) {
     .hero {
-      grid-template-columns: 72px 1fr;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
     }
     .avatar {
       width: 72px;
@@ -113,8 +154,8 @@
     .avatar .monogram {
       font-size: 36px;
     }
-    .hero-id h1 {
-      font-size: 36px;
+    .lede {
+      font-size: 17px;
     }
   }
 </style>
