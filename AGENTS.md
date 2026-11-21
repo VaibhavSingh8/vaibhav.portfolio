@@ -81,7 +81,7 @@ Each script is imported by exactly one component (or Layout):
 ### CSS
 
 - Use scoped `<style>` blocks — one per component.
-- `Layout.astro` holds only: design tokens (`:root`, `[data-theme="dark"]`), `*`/`html`/`body` resets, the shared `main section` / `main h2.section` rules, `.theme-wipe`, `.frame`, `.ambient`, `.dot-grid`, and the global `prefers-reduced-motion` block.
+- `Layout.astro` holds only: design tokens (`:root`, `[data-theme="dark"]`), `*`/`html`/`body` resets, the global `:focus-visible` ring, `.skip-link`, `.sr-only`, the shared `main section` / `main h2.section` rules, `.theme-wipe`, `.frame`, `.ambient`, `.dot-grid`, and the global `prefers-reduced-motion` block. Its `<head>` also holds the blocking inline theme script and the SEO tags.
 - Do not redeclare `section { margin-top }` or `h2.section` in a component — they are defined once in `Layout.astro`.
 - Do not add component-specific CSS to `Layout.astro`.
 - For elements created by JS at runtime (e.g. carousel chips), wrap the selectors in `:global()` inside the owning component's `<style>` block.
@@ -126,6 +126,14 @@ This site is being taken to WCAG 2.2 AA. Do not regress:
   not count — no keyboard, no touch. See the marquee toggle in `Stack.astro`.
 - Control borders use `--border-control`, not `--rule` (SC 1.4.11, 3:1).
 - Interactive things must be real `<button>`/`<a>` elements, not `<div>`s with click handlers.
+- Every page has a skip link to `<main id="main">`, and focus uses the one global `:focus-visible`
+  ring from `Layout.astro`. Don't remove outlines without a visible replacement.
+- `--ink-3` is tuned to 4.5:1 on every surface, including hatch stripes. Check contrast before
+  darkening a surface or lightening a text token.
+- Content that's decorative or duplicated (animated letters, marquee copies) is `aria-hidden`, with
+  an `.sr-only` equivalent beside it.
+- The theme is set by the inline script in `<head>` before first paint. Don't move theme
+  initialisation back into a module script; that brings the flash back.
 - Keep the global `prefers-reduced-motion` block working; if a control must override it, scope the
   override to an explicit user action (see `Stack.astro`).
 
