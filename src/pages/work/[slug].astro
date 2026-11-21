@@ -27,7 +27,7 @@ const { Content } = await render(entry);
 const { title, kicker, outcome, role, team, period, stack, status, draft } = entry.data;
 ---
 
-<Layout title={`${title} — Vaibhav Singh`} description={entry.data.summary}>
+<Layout title={`${title} — Vaibhav Singh`} description={entry.data.summary} type="article">
   <Nav />
   <main>
     <article class="case">

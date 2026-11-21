@@ -2,19 +2,39 @@
 interface Props {
   title?: string;
   description?: string;
+  /** 'article' for case studies */
+  type?: 'website' | 'article';
 }
 
 const {
-  title = 'Vaibhav Singh — Software Engineer',
-  description = 'Software engineer with 4 years building production web applications and AI platforms. Based in Bengaluru.',
+  title = 'Vaibhav Singh — Software Engineer (Full Stack)',
+  description = 'Fullstack software engineer in Bengaluru with 4+ years building data-heavy B2B AI products in React, Next.js, TypeScript, Python and FastAPI.',
+  type = 'website',
 } = Astro.props;
+
+// Absolute URLs need `site` (astro.config.mjs). Without it, skip the tags
+// that would otherwise point at the wrong origin.
+const site = Astro.site;
+const canonical = site ? new URL(Astro.url.pathname, site).href : undefined;
+const ogImage = site ? new URL('/og.png', site).href : undefined;
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Vaibhav Singh',
+  jobTitle: 'Software Engineer (Full Stack)',
+  worksFor: { '@type': 'Organization', name: 'DataPOEM' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Bengaluru', addressCountry: 'IN' },
+  sameAs: ['https://github.com/VaibhavSingh8'],
+  ...(site ? { url: site.href } : {}),
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,8 +44,35 @@ const {
       href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Bricolage+Grotesque:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap"
     />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Vaibhav Singh" />
+    <meta name="theme-color" content="#f6f5f0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f0f13" media="(prefers-color-scheme: dark)" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {site && <link rel="sitemap" href="/sitemap-index.xml" />}
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Vaibhav Singh" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="en_IN" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta property="og:image:width" content="1200" />}
+    {ogImage && <meta property="og:image:height" content="630" />}
+    {ogImage && (
+      <meta
+        property="og:image:alt"
+        content="Vaibhav Singh, fullstack software engineer. Case studies in data-heavy B2B AI products."
+      />
+    )}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
   </head>
   <body>
     <div class="frame" aria-hidden="true"></div>
