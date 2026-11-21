@@ -9,12 +9,11 @@
     <h1>
       <span id="name-glitch">Vaibhav Singh</span>
     </h1>
-    <div class="tagline" id="typewriter">Systems · ML · Interfaces</div>
-    <div class="status">shipping from Bengaluru</div>
+    <p class="tagline">Fullstack engineer · React, Next.js, Python, FastAPI · data-heavy B2B AI products</p>
+    <p class="status">shipping from Bengaluru</p>
   </div>
 </div>
 
-<script>import '../scripts/typewriter.ts'</script>
 <script>import '../scripts/motion-hero.ts'</script>
 
 <style>
@@ -90,6 +89,8 @@
     font-family: var(--font-mono);
     color: var(--ink-2);
     font-size: 13px;
+    margin: 0;
+    max-width: 52ch;
   }
   .status {
     display: inline-flex;
@@ -98,7 +99,7 @@
     font-family: var(--font-mono);
     font-size: 12px;
     color: var(--ink-3);
-    margin-top: 6px;
+    margin: 6px 0 0;
   }
 
   @media (max-width: 680px) {

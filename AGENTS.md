@@ -72,7 +72,7 @@ Each script is imported by exactly one component (or Layout):
 | Script | Imported by |
 | --- | --- |
 | `theme.ts` | `Nav.astro` |
-| `typewriter.ts`, `motion-hero.ts` | `Hero.astro` |
+| `motion-hero.ts` | `Hero.astro` |
 | `carousel.ts` | `Stack.astro` |
 | `ambient.ts`, `interactions.ts`, `motion-reveal.ts` | `Layout.astro` |
 

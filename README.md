@@ -42,7 +42,6 @@ src/
 └── scripts/
     ├── theme.ts              # Theme toggle, wipe animation, click sound
     ├── ambient.ts            # Cursor glow via CSS vars
-    ├── typewriter.ts         # Tagline phrase cycling
     ├── carousel.ts           # Builds stack chips, marquee pause control
     ├── interactions.ts       # Chip ripple origin
     ├── motion-hero.ts        # Letter stagger on hero name
