@@ -4,7 +4,7 @@ import { experience } from '../data/experience';
 
 <section id="experience">
   <h2 class="section">Experience</h2>
-  <p class="section-note">
+  <p class="section-intro">
     The work came first and the title followed: I joined DataPOEM as a frontend
     developer, and the role caught up in April 2026.
   </p>
@@ -46,12 +46,6 @@ import { experience } from '../data/experience';
 </section>
 
 <style>
-  .section-note {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    color: var(--ink-3);
-    margin: -8px 0 12px;
-  }
   .row-item {
     border-bottom: 1px solid var(--rule-2);
     /* lets ::details-content animate to height: auto where supported */
@@ -109,15 +103,13 @@ import { experience } from '../data/experience';
     display: block;
   }
   .org {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    letter-spacing: 0.04em;
+    font-size: 13px;
     color: var(--ink-3);
     margin-bottom: 2px;
   }
   .title {
     font-weight: 600;
-    font-size: 15px;
+    font-size: 17px;
   }
   .head > .sub {
     font-family: var(--font-mono);
@@ -129,7 +121,7 @@ import { experience } from '../data/experience';
     flex-wrap: wrap;
   }
   .line {
-    font-size: 13.5px;
+    font-size: 15px;
     color: var(--ink-2);
     margin-top: 8px;
     max-width: 62ch;
@@ -157,7 +149,7 @@ import { experience } from '../data/experience';
     max-width: 64ch;
   }
   .highlights li {
-    font-size: 13.5px;
+    font-size: 15px;
     color: var(--ink-2);
   }
   .highlights li::marker {
