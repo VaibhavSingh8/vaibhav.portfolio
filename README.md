@@ -14,38 +14,42 @@ Personal portfolio site — built with Astro, TypeScript, and Motion.
 
 ```
 src/
-├── content.config.ts         # Content collection schemas
+├── content.config.ts         # Content collection schema (case-study | note)
 ├── content/
-│   └── work/*.md             # Case studies — one markdown file each
+│   └── work/*.md             # Case studies and notes — one markdown file each
 ├── layouts/
-│   └── Layout.astro          # HTML shell, design tokens, shared section CSS
+│   └── Layout.astro          # HTML shell, tokens, SEO tags, theme script, shared section CSS
 ├── pages/
 │   ├── index.astro           # Home page composition
-│   └── work/[slug].astro     # Case study page, one per content file
+│   ├── robots.txt.ts         # robots.txt (adds the sitemap when SITE_URL is set)
+│   └── work/[slug].astro     # Case study page, one per case-study entry
 ├── components/
 │   ├── Nav.astro             # Sticky nav, theme toggle
-│   ├── Hero.astro            # Avatar, name, tagline, status
-│   ├── About.astro           # Bio bullets, currently widget
-│   ├── Connect.astro         # Social/contact chip links
-│   ├── Hatch.astro           # Section dividers (prop-driven)
-│   ├── Stack.astro           # Marquee tech stack carousel + pause control
-│   ├── Projects.astro        # Case study cards, read from the work collection
+│   ├── Hero.astro            # Avatar, name, lede, calls to action
+│   ├── Hatch.astro           # Section dividers
+│   ├── Projects.astro        # Case study cards + note rows
 │   ├── Experience.astro      # Work history rows (<details>)
-│   ├── Education.astro       # Education rows
+│   ├── Principles.astro      # How I work: principle + proof
+│   ├── About.astro           # Bio, "currently" list
+│   ├── Stack.astro           # Marquee tech stack carousel + pause control
+│   ├── Education.astro       # Education
+│   ├── Connect.astro         # Contact
 │   ├── Quote.astro           # Pull quote
-│   └── Footer.astro          # Copyright + pixel cat
+│   ├── Footer.astro          # Copyright + pixel cat
+│   └── ValidatorDemo.astro   # Interactive demo for the planning workspace case study
 ├── data/
 │   ├── stack.ts              # StackChip[] per carousel row
 │   ├── experience.ts         # ExperienceEntry[] (org, title, period, summary, highlights)
 │   ├── education.ts          # EducationEntry[] (org, title, period)
-│   └── connect.ts            # ConnectLink[] (label, href, svgPath)
+│   ├── connect.ts            # ConnectLink[] (label, href | null, icon paths)
+│   └── principles.ts         # Principle[] (rule, proof)
 └── scripts/
     ├── theme.ts              # Theme toggle, wipe animation, click sound
     ├── ambient.ts            # Cursor glow via CSS vars
     ├── carousel.ts           # Builds stack chips, marquee pause control
-    ├── interactions.ts       # Chip ripple origin
     ├── motion-hero.ts        # Letter stagger on hero name
-    └── motion-reveal.ts      # Scroll-triggered section reveals
+    ├── motion-reveal.ts      # Scroll-triggered section reveals
+    └── validator-demo.ts     # O(n²) vs indexed validator, timed in the browser
 ```
 
 ## Commands
@@ -62,7 +66,16 @@ src/
 
 - **CSS**: Scoped `<style>` per component. Only CSS vars, resets, and global overlays live in `Layout.astro`.
 - **JS**: All client-side logic lives in `src/scripts/*.ts` and is imported by the component that owns it.
-- **Content**: Case studies are markdown in `src/content/work/` (schema in `src/content.config.ts`; `draft: true` hides an entry from production builds). Experience, education, stack and links are typed arrays in `src/data/*.ts`. Neither needs component HTML changes.
+- **Content**: Case studies and notes are markdown in `src/content/work/` (schema in `src/content.config.ts`; `format: note` gives a home-page row with no page; `draft: true` hides an entry from production builds). Experience, education, stack and links are typed arrays in `src/data/*.ts`. Neither needs component HTML changes.
 - **Dynamic DOM**: Components where JS creates elements at runtime (e.g. Stack) wrap those selectors in `:global()` inside their scoped style block.
 - **Colour**: Components never hardcode colours. `--rule` is decorative only; control borders use `--border-control`, which holds 3:1 for WCAG 1.4.11.
-- **Motion v12**: Uses `ease` (not `easing`), `startDelay` (not `start`), and `transform` as CSS string arrays. Lightbox uses FLIP via `animate(...).finished`.
+- **Motion v12**: Uses `ease` (not `easing`), `startDelay` (not `start`), and `transform` as CSS string arrays.
+
+## Deploying
+
+Set `SITE_URL` to the production origin (for example `https://your-domain.com`) in the build
+environment. It drives canonical URLs, absolute Open Graph URLs, the sitemap and the `Sitemap:`
+line in `robots.txt`. Without it the build still succeeds but skips those.
+
+The Open Graph image is `public/og.png`; its source is `tools/og.html`, with the command to
+regenerate it at the top of that file.
