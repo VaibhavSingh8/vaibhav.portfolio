@@ -34,6 +34,20 @@ const person = {
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Runs before first paint so the page never flashes the wrong theme.
+         Must stay inline and blocking. theme.ts owns the toggle after this. -->
+    <script is:inline>
+      (function () {
+        var t = null;
+        try {
+          t = localStorage.getItem('portfolio-theme');
+        } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
