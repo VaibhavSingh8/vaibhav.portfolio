@@ -80,6 +80,12 @@ it should survive a shared link, it's in the URL: filters, tab, search, page
 and the wizard step. Deriving query keys from the URL removed every effect
 whose only job was keeping two copies of state in sync.
 
+| Where it lives | What lives there |
+| --- | --- |
+| The URL | Filters, tab, search, page and the wizard step |
+| TanStack Query | All server data, with query keys derived from the URL |
+| Redux | Only the drafts a user is composing, one slice per tool |
+
 Putting the step in the URL gives deep links, a working back button and safe
 refreshes. The catch is that each step is its own route, so the wizard remounts
 on every navigation. Drafts therefore live in a provider in the Next.js layout,
@@ -128,6 +134,10 @@ dropdown components still mount, so the next step is mount-on-click or
 virtualization.
 
 </details>
+
+<div data-demo="validator">
+  <p>An interactive version of this comparison runs here with JavaScript enabled.</p>
+</div>
 
 <details>
 <summary>Deep dive: autosave when every step is its own route</summary>
