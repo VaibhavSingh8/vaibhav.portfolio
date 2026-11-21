@@ -177,67 +177,9 @@ entries.sort((a, b) => a.data.order - b.data.order);
     color: var(--accent-ink);
   }
 
-  /* proj-opened — card keeps its scope attr when moved into overlay */
-  .proj.proj-opened {
-    grid-template-columns: 1fr !important;
-    padding: 28px !important;
-    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.3);
-  }
-  .proj.proj-opened .thumb {
-    height: 280px;
-    aspect-ratio: unset;
-  }
-
   @media (max-width: 680px) {
     .proj {
       grid-template-columns: 1fr;
     }
-  }
-</style>
-
-<!-- proj-overlay is appended to body by JS so these must be global -->
-<style is:global>
-  .proj-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: none;
-    background: var(--overlay-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    opacity: 0;
-    padding: 48px 24px;
-    overflow-y: auto;
-  }
-  .proj-overlay.open {
-    display: block;
-  }
-  .proj-overlay .stage {
-    max-width: 860px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-  }
-  .proj-overlay .close {
-    position: fixed;
-    top: 18px;
-    right: 22px;
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--border-control);
-    border-radius: 999px;
-    background: var(--card);
-    color: var(--ink);
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    transition:
-      background 0.2s,
-      color 0.2s;
-  }
-  .proj-overlay .close:hover {
-    background: var(--accent);
-    color: #fff;
-    border-color: transparent;
   }
 </style>

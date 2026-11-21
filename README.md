@@ -47,8 +47,7 @@ src/
     ├── expandable.ts         # [data-expand] row click handler
     ├── interactions.ts       # Chip ripple origin
     ├── motion-hero.ts        # Letter stagger on hero name
-    ├── motion-reveal.ts      # Scroll-triggered section reveals
-    └── motion-lightbox.ts    # FLIP lightbox — currently unused
+    └── motion-reveal.ts      # Scroll-triggered section reveals
 ```
 
 ## Commands

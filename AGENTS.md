@@ -77,9 +77,6 @@ Each script is imported by exactly one component (or Layout):
 | `expandable.ts` | `Experience.astro` |
 | `ambient.ts`, `interactions.ts`, `motion-reveal.ts` | `Layout.astro` |
 
-`motion-lightbox.ts` is currently unused — case study cards link to real pages instead of
-opening an overlay.
-
 ## Coding Guidelines
 
 ### CSS
