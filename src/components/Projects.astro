@@ -5,39 +5,55 @@ const entries = await getCollection('work', ({ data }) =>
   import.meta.env.PROD ? !data.draft : true,
 );
 entries.sort((a, b) => a.data.order - b.data.order);
+
+const caseStudies = entries.filter((e) => e.data.format === 'case-study');
+const notes = entries.filter((e) => e.data.format === 'note');
 ---
 
 <section id="projects">
   <h2 class="section">Selected work</h2>
   <p class="section-note">
     Most of my work is behind enterprise SSO, so these are write-ups rather
-    than repositories.
+    than repositories. Clients are anonymised and numbers keep their scope.
   </p>
 
   <div class="projects">
-    {entries.map((entry) => (
+    {caseStudies.map((entry) => (
       <article class="proj">
-        <div class="thumb">
+        <div class="head">
+          <span class="kicker">{entry.data.kicker}</span>
           <span class="badge">{entry.data.status}</span>
-          {entry.data.thumbLabel ?? entry.data.title}
         </div>
-        <div class="body">
-          <div class="kicker">{entry.data.kicker}</div>
-          <h3>
-            <a href={`/work/${entry.id}`}>{entry.data.title}</a>
-          </h3>
-          <p>{entry.data.summary}</p>
-          <p class="outcome">{entry.data.outcome}</p>
-          <div class="actions">
-            <a href={`/work/${entry.id}`} class="chip">read case study &rarr;</a>
-            {entry.data.links.map((l) => (
-              <a href={l.href} class="chip">{l.label}</a>
-            ))}
-          </div>
-        </div>
+        <h3>
+          <a href={`/work/${entry.id}`}>{entry.data.title}</a>
+        </h3>
+        <p class="summary">{entry.data.summary}</p>
+        <p class="outcome">{entry.data.outcome}</p>
+        <span class="cta" aria-hidden="true">Read the case study &rarr;</span>
       </article>
     ))}
   </div>
+
+  {notes.length > 0 && (
+    <>
+      <h3 class="sub">More work</h3>
+      <ul class="notes">
+        {notes.map((entry) => (
+          <li class="note">
+            <div class="note-head">
+              <span class="kicker">{entry.data.kicker}</span>
+              {entry.data.status !== 'shipped' && (
+                <span class="badge">{entry.data.status}</span>
+              )}
+            </div>
+            <p class="note-title">{entry.data.title}</p>
+            <p class="summary">{entry.data.summary}</p>
+            <p class="outcome">{entry.data.outcome}</p>
+          </li>
+        ))}
+      </ul>
+    </>
+  )}
 </section>
 
 <style>
@@ -51,11 +67,11 @@ entries.sort((a, b) => a.data.order - b.data.order);
     display: grid;
     gap: 14px;
   }
+
+  /* a case study card — the whole card is the link (see h3 a::after) */
   .proj {
-    display: grid;
-    grid-template-columns: 1.2fr 2fr;
-    gap: 18px;
-    padding: 18px;
+    position: relative;
+    padding: 22px 22px 20px;
     border: 1px solid var(--rule);
     background: var(--card);
     border-radius: 14px;
@@ -63,83 +79,17 @@ entries.sort((a, b) => a.data.order - b.data.order);
     transition:
       transform 0.2s,
       border-color 0.2s;
-    position: relative;
-    overflow: hidden;
   }
   .proj:hover {
     transform: translateY(-2px);
     border-color: var(--accent-edge);
   }
-  .proj::after {
-    content: "";
-    position: absolute;
-    inset: auto -1px -1px auto;
-    width: 40px;
-    height: 40px;
-    background: repeating-linear-gradient(
-      135deg,
-      var(--hatch) 0 4px,
-      transparent 4px 8px
-    );
-    clip-path: polygon(100% 0, 100% 100%, 0 100%);
-    opacity: 0.5;
-  }
-  .thumb {
-    aspect-ratio: 4/3;
-    border-radius: 10px;
-    background-color: var(--bg-2);
-    background-image: repeating-linear-gradient(
-      45deg,
-      var(--hatch) 0 6px,
-      transparent 6px 12px
-    );
-    border: 1px solid var(--rule);
-    position: relative;
-    display: grid;
-    place-items: center;
-    color: var(--ink-3);
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    overflow: hidden;
-  }
-  .thumb .badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 3px 8px;
-    font-size: 10.5px;
-    background: var(--bg);
-    color: var(--ink-2);
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-  }
-  h3 a {
-    color: inherit;
-    text-decoration: none;
-  }
-  h3 a:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  h3 a:focus-visible {
-    outline: 2px solid var(--ink);
-    outline-offset: 3px;
-    border-radius: 3px;
-  }
-  .outcome {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    color: var(--accent-ink);
-    margin: 0 0 10px;
-  }
-  h3 {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 22px;
-    margin: 2px 0 4px;
-    letter-spacing: -0.01em;
+  .head,
+  .note-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
   .kicker {
     font-family: var(--font-mono);
@@ -148,38 +98,91 @@ entries.sort((a, b) => a.data.order - b.data.order);
     text-transform: uppercase;
     color: var(--ink-3);
   }
-  p {
+  .badge {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    padding: 2px 8px;
     color: var(--ink-2);
-    font-size: 13.5px;
-    margin: 8px 0 10px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
   }
-  .actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 6px;
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 8px 0 0;
   }
-  .actions .chip {
+  h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .proj:hover h3 a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  h3 a:focus-visible {
+    outline: none;
+  }
+  .proj:has(h3 a:focus-visible) {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+  .summary {
+    color: var(--ink-2);
+    font-size: 14px;
+    margin: 8px 0 0;
+  }
+  .outcome {
     font-family: var(--font-mono);
     font-size: 11.5px;
-    padding: 5px 12px;
-    border: 1px solid var(--border-control);
-    border-radius: 999px;
-    background: var(--bg);
-    color: var(--ink-2);
-    text-decoration: none;
-    transition:
-      border-color 0.2s,
-      color 0.2s,
-      background 0.2s;
-  }
-  .actions .chip:hover {
-    border-color: var(--accent);
     color: var(--accent-ink);
+    margin: 10px 0 0;
+  }
+  .cta {
+    display: inline-block;
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-2);
   }
 
-  @media (max-width: 680px) {
-    .proj {
-      grid-template-columns: 1fr;
-    }
+  /* notes — plain rows, not cards, because they are not clickable */
+  h3.sub {
+    font-size: 18px;
+    margin: 36px 0 4px;
+  }
+  .notes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .note {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule-2);
+  }
+  .note:last-child {
+    border-bottom: none;
+  }
+  .note-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin: 4px 0 0;
+  }
+  .note .summary {
+    font-size: 13.5px;
+    margin-top: 4px;
+  }
+  .note .outcome {
+    margin-top: 6px;
   }
 </style>

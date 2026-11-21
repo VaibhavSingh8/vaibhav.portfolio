@@ -3,33 +3,40 @@ import { z } from 'zod';
 import { glob } from 'astro/loaders';
 
 /**
- * Case studies. One markdown file per piece of work in `src/content/work/`.
- * The filename becomes the URL: `fastapi-migration.md` -> `/work/fastapi-migration`.
+ * Work. One markdown file per piece of work in `src/content/work/`.
  *
- * Frontmatter drives the card on the homepage; the markdown body is the
- * case study itself.
+ * Two formats:
+ * - `case-study` (default): a card on the homepage plus a page at
+ *   `/work/<filename>`. The markdown body is the case study.
+ * - `note`: a compact, non-clickable row under "More work". No page is
+ *   generated and the body is not rendered, so it can hold notes or a
+ *   skeleton until the entry is promoted to a case study.
  */
 const work = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/work' }),
   schema: z.object({
-    /* --- shown on the card --- */
+    format: z.enum(['case-study', 'note']).default('case-study'),
+
+    /* --- shown on the card / row --- */
     title: z.string(),
     /** small uppercase line above the title, e.g. "Backend migration · DataPOEM" */
     kicker: z.string(),
     /** one or two sentences — this is what most people will actually read */
     summary: z.string(),
-    /** the headline number, e.g. "100+ endpoints · 2 months · no downtime" */
+    /** the headline numbers, each with its scope */
     outcome: z.string(),
-    /** text inside the thumbnail block; falls back to the title */
-    thumbLabel: z.string().optional(),
 
     /* --- shown on the case study page --- */
     role: z.string(),
-    period: z.string(),
-    stack: z.array(z.string()),
+    team: z.string().optional(),
+    /** optional so a note can leave out a date that isn't confirmed */
+    period: z.string().optional(),
+    stack: z.array(z.string()).default([]),
 
     /* --- housekeeping --- */
-    status: z.enum(['shipped', 'in progress', 'archived']).default('shipped'),
+    status: z
+      .enum(['shipped', 'in production', 'in rollout', 'built, pre-launch'])
+      .default('shipped'),
     /** lower numbers sort first */
     order: z.number().default(0),
     /** drafts are visible in `pnpm dev` but excluded from the production build */

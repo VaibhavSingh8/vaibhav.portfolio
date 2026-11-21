@@ -7,8 +7,10 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const entries = await getCollection('work', ({ data }) =>
-    import.meta.env.PROD ? !data.draft : true,
+  const entries = await getCollection(
+    'work',
+    ({ data }) =>
+      data.format === 'case-study' && (import.meta.env.PROD ? !data.draft : true),
   );
   return entries.map((entry) => ({
     params: { slug: entry.id },
@@ -22,7 +24,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const { title, kicker, outcome, role, period, stack, draft } = entry.data;
+const { title, kicker, outcome, role, team, period, stack, status, draft } = entry.data;
 ---
 
 <Layout title={`${title} — Vaibhav Singh`} description={entry.data.summary}>
@@ -42,14 +44,28 @@ const { title, kicker, outcome, role, period, stack, draft } = entry.data;
           <dt>Role</dt>
           <dd>{role}</dd>
         </div>
+        {team && (
+          <div>
+            <dt>Team</dt>
+            <dd>{team}</dd>
+          </div>
+        )}
+        {period && (
+          <div>
+            <dt>When</dt>
+            <dd>{period}</dd>
+          </div>
+        )}
         <div>
-          <dt>When</dt>
-          <dd>{period}</dd>
+          <dt>Status</dt>
+          <dd>{status}</dd>
         </div>
-        <div>
-          <dt>Stack</dt>
-          <dd>{stack.join(' · ')}</dd>
-        </div>
+        {stack.length > 0 && (
+          <div class="meta-wide">
+            <dt>Stack</dt>
+            <dd>{stack.join(' · ')}</dd>
+          </div>
+        )}
       </dl>
 
       <div class="prose">
