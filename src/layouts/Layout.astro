@@ -100,9 +100,6 @@ const person = {
       import "../scripts/ambient.ts";
     </script>
     <script>
-      import "../scripts/interactions.ts";
-    </script>
-    <script>
       import "../scripts/motion-reveal.ts";
     </script>
   </body>
@@ -154,9 +151,11 @@ const person = {
     --shadow: 0 1px 0 rgba(20, 20, 20, 0.04), 0 1px 2px rgba(20, 20, 20, 0.04);
 
     /* layout */
-    --measure: 760px; /* content column width */
-    --gutter: clamp(16px, 4vw, 40px); /* space either side of the content */
-    --frame-inset: clamp(40px, 10vw, 160px); /* where the page rules sit */
+    --measure: 760px; /* the one column: nav, main and footer all use it */
+    --gutter: clamp(16px, 4vw, 40px); /* space between the column edge and its content */
+    /* the dashed page rules sit exactly on the column's outer edges */
+    /* % resolves against the fixed .frame (the viewport minus any scrollbar) */
+    --frame-inset: calc(50% - var(--measure) / 2);
 
     /* type */
     --font-sans: "Inter", system-ui, sans-serif;
@@ -219,8 +218,8 @@ const person = {
     background-attachment: fixed;
     color: var(--ink);
     font-family: var(--font-sans);
-    font-size: 15px;
-    line-height: 1.55;
+    font-size: 16px;
+    line-height: 1.6;
     letter-spacing: -0.005em;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
@@ -293,12 +292,41 @@ const person = {
     scroll-margin-top: 80px; /* so anchor links clear the sticky nav */
   }
 
+  /* Three tiers of section heading. Tier 1 (default) is for the work itself:
+     Selected work, Experience. Tier 2 is supporting context. Tier 3 is
+     reference detail that only needs a label. */
   main h2.section {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+  }
+  main h2.section.t2 {
+    font-size: 24px;
     letter-spacing: -0.015em;
-    margin: 0 0 16px;
+  }
+  main h2.section.t3 {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  /* the one or two sentences under a section heading */
+  main .section-intro {
+    color: var(--ink-2);
+    font-size: 15px;
+    max-width: 40em;
+    margin: 0 0 20px;
+    text-wrap: pretty;
+  }
+
+  /* card -> case study: the title morphs across the page load where supported */
+  @view-transition {
+    navigation: auto;
   }
 
   /* ==========================================================
@@ -332,8 +360,6 @@ const person = {
     height: 140px;
     background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
     background-size: 12px 12px;
-    border-left: 1px dashed var(--rule);
-    border-right: 1px dashed var(--rule);
     mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
     -webkit-mask-image: radial-gradient(
       ellipse at center,
@@ -396,17 +422,23 @@ const person = {
      6. RESPONSIVE + MOTION PREFERENCES
      ========================================================== */
 
-  @media (max-width: 680px) {
-    main {
-      padding: 16px 20px 60px;
-    }
+  /* the rules need room outside the column, so drop them once it fills the screen */
+  @media (max-width: 840px) {
     .frame::before,
     .frame::after {
       display: none;
     }
   }
+  @media (max-width: 680px) {
+    main {
+      padding: 16px var(--gutter) 60px;
+    }
+  }
 
   @media (prefers-reduced-motion: reduce) {
+    @view-transition {
+      navigation: none;
+    }
     *,
     *::before,
     *::after {

@@ -5,7 +5,7 @@
     <div class="nav-links">
       <a href="/#projects" class="nav-a">Work</a>
       <a href="/#experience" class="nav-a">Experience</a>
-      <a href="/#about" class="nav-a">About</a>
+      <a href="/#about" class="nav-a hide-sm">About</a>
       <a href="/#connect" class="nav-a">Contact</a>
     </div>
     <button type="button" class="theme-btn" id="theme" aria-label="Switch theme">
@@ -52,10 +52,11 @@
     background: var(--nav-bg);
     border-bottom: 1px solid var(--rule-2);
   }
+  /* same column as <main>, so the brand lines up with the content below */
   .nav-inner {
-    max-width: 1080px;
+    max-width: var(--measure);
     margin: 0 auto;
-    padding: 14px clamp(40px, 10vw, 160px);
+    padding: 12px var(--gutter);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -133,5 +134,19 @@
   }
   .theme-btn:active svg {
     transform: rotate(-30deg) scale(0.9);
+  }
+
+  @media (max-width: 560px) {
+    .brand {
+      font-size: 16px;
+    }
+    .nav-links a {
+      font-size: 12px;
+      padding: 8px 7px;
+    }
+    /* About is the lowest-priority link; drop it so the bar stays on one line */
+    .nav-links a.hide-sm {
+      display: none;
+    }
   }
 </style>

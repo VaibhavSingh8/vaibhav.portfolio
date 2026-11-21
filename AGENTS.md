@@ -90,7 +90,7 @@ Each script is imported by exactly one component (or Layout):
 - Lines: `--rule` and `--rule-2` are **decorative hairlines only**. Borders on buttons and links must use `--border-control`, which is kept at 3:1 contrast for WCAG 1.4.11.
 - Accent: `--accent`, `--accent-ink`, `--accent-soft`, `--accent-faint`, `--accent-edge`.
 - Translucent surfaces: `--nav-bg`, `--overlay-bg`, `--card-soft`. Also `--live`, `--live-ring`, `--shadow`, `--hatch`, `--grid-dot`.
-- Layout: `--measure`, `--gutter`, `--frame-inset`.
+- Layout: `--measure` (the one column — nav, main and footer all align to it), `--gutter`, `--frame-inset` (derived from `--measure`; the page rules sit on the column edges).
 - Typography lives in three CSS vars, never hardcode a font string in a component: `--font-sans` (Inter — body copy, labels), `--font-mono` (IBM Plex Mono — meta text, tags, terminal-style bits), `--font-display` (Bricolage Grotesque — section headers, hero name, italic accent moments like the "currently" widget values and pull quote).
 - For a repeated-row layout that needs columns to align across rows (see `About.astro`'s `.currently` widget), make the parent `display: grid` with the real column tracks and give each row `grid-template-columns: subgrid; grid-column: 1 / -1`. Do not give each row its own independent `grid-template-columns` — the tracks size per-row instead of sharing one layout, which misaligns content across rows.
 
