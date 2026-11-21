@@ -51,7 +51,7 @@ src/
 | `Connect.astro` | Social chip links, buildstrip |
 | `Stack.astro` | Two-row marquee carousel + pause control |
 | `Projects.astro` | Case study cards, read from the `work` collection |
-| `Experience.astro` | Expandable work history rows |
+| `Experience.astro` | Work history rows as `<details>`/`<summary>` |
 | `Education.astro` | Education rows |
 | `Quote.astro` | Pull quote block |
 | `Footer.astro` | Copyright + pixel cat SVG |
@@ -61,7 +61,7 @@ src/
 Edit these to update content — no component HTML changes needed:
 
 - `stack.ts` — `StackChip[]` grouped by row (`1 | 2 | 3`)
-- `experience.ts` — `ExperienceEntry[]` (org, title, type, period, tags, description)
+- `experience.ts` — `ExperienceEntry[]` (org, location, title, type, period, summary, highlights, tags)
 - `education.ts` — `EducationEntry[]` (org, title, period)
 - `connect.ts` — `ConnectLink[]` (label, href, paths, filled)
 
@@ -74,7 +74,6 @@ Each script is imported by exactly one component (or Layout):
 | `theme.ts` | `Nav.astro` |
 | `typewriter.ts`, `motion-hero.ts` | `Hero.astro` |
 | `carousel.ts` | `Stack.astro` |
-| `expandable.ts` | `Experience.astro` |
 | `ambient.ts`, `interactions.ts`, `motion-reveal.ts` | `Layout.astro` |
 
 ## Coding Guidelines

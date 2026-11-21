@@ -30,13 +30,13 @@ src/
 │   ├── Hatch.astro           # Section dividers (prop-driven)
 │   ├── Stack.astro           # Marquee tech stack carousel + pause control
 │   ├── Projects.astro        # Case study cards, read from the work collection
-│   ├── Experience.astro      # Expandable work history rows
+│   ├── Experience.astro      # Work history rows (<details>)
 │   ├── Education.astro       # Education rows
 │   ├── Quote.astro           # Pull quote
 │   └── Footer.astro          # Copyright + pixel cat
 ├── data/
 │   ├── stack.ts              # StackChip[] per carousel row
-│   ├── experience.ts         # ExperienceEntry[] (org, title, period, tags, desc)
+│   ├── experience.ts         # ExperienceEntry[] (org, title, period, summary, highlights)
 │   ├── education.ts          # EducationEntry[] (org, title, period)
 │   └── connect.ts            # ConnectLink[] (label, href, svgPath)
 └── scripts/
@@ -44,7 +44,6 @@ src/
     ├── ambient.ts            # Cursor glow via CSS vars
     ├── typewriter.ts         # Tagline phrase cycling
     ├── carousel.ts           # Builds stack chips, marquee pause control
-    ├── expandable.ts         # [data-expand] row click handler
     ├── interactions.ts       # Chip ripple origin
     ├── motion-hero.ts        # Letter stagger on hero name
     └── motion-reveal.ts      # Scroll-triggered section reveals
