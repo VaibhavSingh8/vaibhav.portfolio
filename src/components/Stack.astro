@@ -1,3 +1,9 @@
+---
+import { stackRows } from '../data/stack.ts';
+
+const names = [...stackRows[1], ...stackRows[2], ...stackRows[3]].map((c) => c.name);
+---
+
 <section id="stack" data-paused="false">
   <h2 class="section">Tech Stack</h2>
   <div class="stack-head">
@@ -19,10 +25,15 @@
     </button>
   </div>
 
-  <div class="marquee" data-speed="48">
+  <!-- the marquee repeats every chip several times, so screen readers get
+       this list instead and the moving copies are hidden from them -->
+  <ul class="sr-only">
+    {names.map((n) => <li>{n}</li>)}
+  </ul>
+  <div class="marquee" data-speed="48" aria-hidden="true">
     <div class="track" data-row="1"></div>
   </div>
-  <div class="marquee" data-speed="64" data-dir="reverse">
+  <div class="marquee" data-speed="64" data-dir="reverse" aria-hidden="true">
     <div class="track" data-row="2"></div>
   </div>
 </section>
