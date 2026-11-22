@@ -1,5 +1,7 @@
 export interface ConnectLink {
   label: string;
+  /** what the visitor sees: the address or handle, not a generic word */
+  text: string;
   /** null hides the chip until a real URL exists — never ship a dead `#` */
   href: string | null;
   /** Raw SVG path string(s) to use as <path d="..."> inside a <svg viewBox="0 0 24 24"> */
@@ -11,6 +13,7 @@ export interface ConnectLink {
 export const connectLinks: ConnectLink[] = [
   {
     label: 'GitHub',
+    text: 'VaibhavSingh8',
     href: 'https://github.com/VaibhavSingh8',
     paths: [
       'M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.17-1.12-1.48-1.12-1.48-.92-.63.07-.62.07-.62 1.01.07 1.54 1.04 1.54 1.04.9 1.54 2.36 1.1 2.93.84.09-.65.35-1.1.64-1.35-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.03A9.6 9.6 0 0 1 12 6.84c.85 0 1.7.11 2.5.33 1.9-1.3 2.74-1.03 2.74-1.03.56 1.37.21 2.39.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z',
@@ -19,6 +22,7 @@ export const connectLinks: ConnectLink[] = [
   },
   {
     label: 'X',
+    text: '@xVaibhavSingh',
     // TODO(vaibhav): handle taken from your public GitHub profile; confirm it's current.
     href: 'https://x.com/xVaibhavSingh',
     paths: [
@@ -28,6 +32,7 @@ export const connectLinks: ConnectLink[] = [
   },
   {
     label: 'LinkedIn',
+    text: 'LinkedIn',
     // TODO(vaibhav): add your LinkedIn profile URL. Hidden until then.
     href: null,
     paths: [
@@ -37,12 +42,14 @@ export const connectLinks: ConnectLink[] = [
   },
   {
     label: 'Email',
+    text: 'vaibhavsinghr.08@gmail.com',
     href: 'mailto:vaibhavsinghr.08@gmail.com',
     paths: ['M2 5h20v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5Z', 'm3 6 9 7 9-7'],
     filled: false,
   },
   {
     label: 'Résumé',
+    text: 'PDF',
     // TODO(vaibhav): drop the PDF in public/ (e.g. public/vaibhav-singh-resume.pdf)
     // and set href to '/vaibhav-singh-resume.pdf'. Hidden until then.
     href: null,

@@ -55,7 +55,7 @@ src/
 | `About.astro` | Bio paragraphs, "currently" list |
 | `Stack.astro` | Two-row marquee carousel + pause control |
 | `Education.astro` | Education, one line per entry |
-| `Connect.astro` | Contact: email, profile links, availability line with pulse dot |
+| `Connect.astro` | Contact: one aligned list of channels (email first, with a copy button), availability line with pulse dot |
 | `Quote.astro` | Pull quote |
 | `Footer.astro` | Copyright + pixel cat SVG |
 | `ValidatorDemo.astro` | Interactive demo, mounted into `<div data-demo="validator">` in case study markdown |
@@ -67,7 +67,7 @@ Edit these to update content — no component HTML changes needed:
 - `stack.ts` — `StackChip[]` grouped by row (`1 | 2 | 3`)
 - `experience.ts` — `ExperienceEntry[]` (org, location, title, type, period, summary, highlights, tags)
 - `education.ts` — `EducationEntry[]` (org, title, period)
-- `connect.ts` — `ConnectLink[]` (label, href, paths, filled). `href: null` hides the link; never ship `#`.
+- `connect.ts` — `ConnectLink[]` (label, text, href, paths, filled). `text` is the address or handle shown to visitors. `href: null` hides the link; never ship `#`.
 - `principles.ts` — `Principle[]` (rule, proof). Every principle needs real proof.
 
 ### Scripts (`src/scripts/`)
@@ -126,6 +126,10 @@ Every fact, number, name and date comes from the owner. Never invent one. Missin
 in a `<!-- TODO(vaibhav): ... -->` (or `# TODO(vaibhav):` in YAML). Clients are anonymised, and
 security work is described as "remediated findings from an external security audit", with no
 specifics.
+
+No lines of code, authorship percentages ("80% by git blame"), PR counts, or internal counts that
+describe the employer's systems (endpoints, APIs, workers, migrations, tests, files). They're either
+proprietary or don't matter to a reader. Lead with ownership, scope and outcomes instead.
 
 ### TypeScript
 
