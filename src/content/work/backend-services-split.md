@@ -1,16 +1,16 @@
 ---
 format: note
-title: Backend services split and a staged AWS Batch job pipeline
+title: Splitting the core backend by who it serves
 kicker: Platform · DataPOEM
 summary: >-
-  Architecting the split of two tightly coupled backend services by audience
-  (client-facing, internal tools, and an AI service with restricted access), with
-  long-running jobs on a prepare, compute, finalize pipeline. I built the
-  reconciler that keeps jobs from getting stuck, lost or run twice.
+  I'm leading the split of two tightly coupled backend services by who uses
+  them: clients, internal tools, and an AI service with restricted access.
+  Long-running jobs move onto a staged pipeline, and I built the system that
+  keeps those jobs from getting stuck, lost or run twice.
 outcome: >-
-  Zero frontend changes required · A reconciler for stuck, lost or double-run jobs ·
-  in rollout
-role: Architected and led the split
+  No frontend changes needed · Jobs kept from getting stuck, lost or run twice ·
+  In rollout
+role: Leading the split; built the job reconciler
 period: Oct – Nov 2026
 stack: [AWS Batch, Microsoft Entra ID]
 status: in rollout

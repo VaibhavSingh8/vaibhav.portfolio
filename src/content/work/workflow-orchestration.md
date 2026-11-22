@@ -1,13 +1,13 @@
 ---
 format: note
-title: Workflow orchestration with a visual DAG editor
+title: Workflow orchestration with a visual editor
 kicker: Fullstack · DataPOEM
 summary: >-
-  Co-architected a Temporal-based orchestration system with two other
-  engineers. I built the React Flow editor where a workflow is drawn rather
+  Co-designed a workflow orchestration system on Temporal with two other
+  engineers. I built the visual editor (React Flow) where a workflow is drawn rather
   than scripted, and the layer that runs the drawn workflow on Temporal.
 outcome: A manual process across several teams went from 3 days to under 5 hours
-role: Co-architect; built the DAG editor and the orchestration layer
+role: Co-designer; built the visual editor and the layer that runs it
 team: 3 engineers
 # TODO(vaibhav): add a period; the brief only says "before March 2026".
 stack: [React, React Flow, Temporal, AWS S3, FastAPI]
