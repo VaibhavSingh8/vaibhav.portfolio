@@ -29,6 +29,6 @@ export const principles: Principle[] = [
   {
     rule: 'Write decisions down.',
     proof:
-      'A decision log of about 70 rows, numbered open questions cited from the code, and written conventions the other engineer adopted.',
+      'A decision log, numbered open questions cited from the code, and written conventions the other engineer adopted.',
   },
 ];

@@ -23,11 +23,11 @@ export const experience: ExperienceEntry[] = [
     summary:
       'Own the identity and access service, led the AI planning workspace, and am architecting the backend services split.',
     highlights: [
-      'Led the architecture and delivery of an AI planning workspace that replaced three legacy planning tools: first commit to production in about 10 weeks, ~35k lines of TypeScript/React, about 80% written by me.',
+      'Owned an AI planning workspace from the product team’s idea to production in about 10 weeks, replacing three legacy planning tools. Shaped scope, flow and accessibility with the product team, led the architecture, and directed AI agents through a reviewed build.',
       'Cut per-keystroke validation on a 3,000-row editable table from 835 ms to 14 ms by replacing an O(n²) validator, with the output proved byte-identical.',
       'Own the identity and access service that the core platform and 3+ internal products sign in through. Every feature request and production issue on it comes to me.',
-      'Designed and built usage-based billing on Stripe for an AI model-training SDK (built, pre-launch): ~25 endpoints, six Lambda workers, ~256 tests, with every money path safe to run twice.',
-      'Architecting the split of two coupled backend services and a staged AWS Batch job pipeline (in rollout). Built its job reconciler: ~5.6k lines, 126 tests.',
+      'Designed and built usage-based billing on Stripe for an AI model-training SDK (built, pre-launch), with every money path safe to run twice and a test suite where there was none.',
+      'Architecting the split of two coupled backend services and a staged AWS Batch job pipeline (in rollout), and built the job reconciler that keeps jobs from getting stuck, lost or run twice.',
       'Review the work of consultant and contract developers, and own deployment success across the company’s products.',
     ],
     tags: ['Next.js', 'React', 'TypeScript', 'Python', 'FastAPI', 'AWS', 'Stripe'],
@@ -42,7 +42,7 @@ export const experience: ExperienceEntry[] = [
     summary:
       'A frontend title, but the work went fullstack: an identity migration, workflow orchestration and security fixes.',
     highlights: [
-      'Led the migration of the identity service from Java Spring Boot to FastAPI: ~120 APIs, two engineers, about two months to production. Migrated ~40 APIs myself and reviewed 45 of the service’s 48 merged PRs.',
+      'Led the migration of the identity service from Java Spring Boot to FastAPI: about two months to production. The other engineers were consultants new to the platform, so I set the order of work, made the architectural calls, reviewed the port and planned the go-live.',
       'Co-architected a Temporal-based workflow orchestration system (3 engineers) and built its React Flow DAG editor and orchestration layer. A manual multi-team process went from 3 days to under 5 hours.',
       'Proposed moving the platform from Vue 2 to Next.js and migrated one module: its JS payload fell 81% and Lighthouse performance went from 65 to 98. The migration as a whole cut total JS by 80%.',
       'Remediated findings from an external security audit, with no recurrence in the next audit.',

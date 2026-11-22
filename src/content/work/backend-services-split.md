@@ -8,7 +8,7 @@ summary: >-
   long-running jobs on a prepare, compute, finalize pipeline. I built the
   reconciler that keeps jobs from getting stuck, lost or run twice.
 outcome: >-
-  Zero frontend changes required · reconciler ~5.6k lines, 126 tests ·
+  Zero frontend changes required · A reconciler for stuck, lost or double-run jobs ·
   in rollout
 role: Architected and led the split
 period: Oct – Nov 2026

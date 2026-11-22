@@ -8,9 +8,9 @@ summary: >-
   It's tested end to end in Stripe's test mode, and the product hasn't
   launched yet.
 outcome: >-
-  Built, pre-launch · ~25 endpoints, 6 Lambda workers, 19 migrations ·
-  ~256 tests where there were none
-role: Designed and built it (about 66% of the Python on the branch, by git blame)
+  Built, pre-launch · Every money path safe to run twice ·
+  Tested end to end in Stripe test mode
+role: Designed and built it
 period: Jun – Oct 2026
 # TODO(vaibhav): confirm whether FastAPI and PostgreSQL belong in this list.
 stack:
@@ -60,11 +60,10 @@ idempotent, so a repeated event has no extra effect.
 
 ### Small workers with one job each
 
-Six Lambda workers handle payment retry, month-end close, webhook processing,
-setup retry, grace-period expiry and an outbox publisher. Behind them are the
-billing data model, a Stripe client, the billing-cycle, invoice, payment and
-webhook services, about 25 endpoints across 10 routers, and 19 database
-migrations.
+Separate small workers handle payment retry, month-end close, webhook
+processing, setup retry, grace-period expiry and outbox publishing, each with
+one job. Behind them sit the billing data model, a Stripe client, and services
+for billing cycles, invoices, payments and webhooks.
 
 ### Signup that doesn't wait for billing
 
@@ -99,7 +98,9 @@ gets it wrong.
 
 ### Tests where there were none
 
-About 256 tests, including concurrency tests and a full loop through Stripe's test mode: charge, then webhook.
+The billing code had no tests when I started. It now has a suite that
+includes concurrency tests and a full loop through Stripe's test mode: charge,
+then webhook.
 
 <details>
 <summary>Designed but not merged: invoicing from a price catalog</summary>
@@ -115,11 +116,10 @@ Cards are collected through a verified SetupIntent. None of this is shipped.
 ## Result
 
 - **Built, pre-launch.** There are no real transactions or revenue to report.
-- **The full billing backend**: data model, Stripe client, services, about 25
-  endpoints, 19 migrations and six workers, plus the billing frontend.
-- **About 256 tests** where there were none, including concurrency tests and a
+- **The full billing backend**: data model, Stripe client, services and
+  workers, plus the billing frontend.
+- **A test suite where there was none**, including concurrency tests and a
   Stripe test-mode loop.
-- **About 66% of the Python** on the billing branch is mine, by git blame.
 
 ## What I'd do differently
 
