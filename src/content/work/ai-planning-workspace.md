@@ -1,16 +1,17 @@
 ---
-title: An AI planning workspace, first commit to production in 10 weeks
-kicker: Frontend architecture · DataPOEM
+title: An AI planning workspace, from product idea to production in 10 weeks
+kicker: Product and frontend architecture · DataPOEM
 summary: >-
-  Marketing planners had three separate tools and no way to save a
-  half-finished plan. I led the architecture of one guided workspace that
-  replaced them, with autosaved drafts and sharing. It was built alongside the
-  legacy tools so nothing clients used daily broke.
+  The product team wanted one guided workspace in place of three separate
+  planning tools. I took it from their prototype to production: shaping scope,
+  flow and accessibility with them, leading the architecture, and taking their
+  changes right up to launch. AI agents wrote the code; I directed and reviewed
+  every change.
 outcome: >-
-  ~10 weeks to production · ~35k lines, ~80% written by me ·
+  ~10 weeks, idea to production · 3 legacy tools → 1 workspace ·
   835 ms → 14 ms per keystroke on a 3,000-row table
-role: Tech lead and primary engineer
-team: Me, one consultant engineer, and the backend team
+role: Owned delivery end to end, from product shaping to production
+team: Me, one consultant engineer, the product team and the backend team
 period: Aug – Oct 2026
 stack:
   - Next.js 16 (App Router)
@@ -35,8 +36,8 @@ interface, and none of them lets you save a half-finished plan or hand it to a
 colleague.
 
 DataPOEM builds decision AI on a causal model, and a new family of those models
-needed a new planning flow. I led the architecture and delivery of the
-workspace that serves it:
+needed a new planning flow. The idea came from the product team. I picked it up
+from scratch and owned it until it reached clients:
 
 - one guided, step-by-step wizard for all three planning tools
 - autosaved, resumable drafts
@@ -45,11 +46,15 @@ workspace that serves it:
 - a plans workbench for your plans and the ones shared with you
 - access control by module permission
 
+<!-- TODO(vaibhav): scope of the module: number of pages/screens, wizard steps per tool, shared components. -->
+
 ## The constraint
 
 - **The legacy tools had to keep running.** Clients used them every day.
-- **The API contract moved under us.** About 15 optimization and forecasting
-  endpoints went through a v2 to v3 contract change, and the sample payloads
+- **The product was still taking shape.** Changes kept arriving close to
+  completion, and they had to land without a rewrite.
+- **The API contract moved under us.** The optimization and forecasting
+  endpoints went through a major contract change, and the sample payloads
   contradicted each other.
 - **Real data is big.** Feature hierarchies go six levels deep, and constraint
   tables run to about 3,000 rows. I tested them to 12,000.
@@ -57,6 +62,25 @@ workspace that serves it:
   production on 16 Oct.
 
 ## What I did
+
+### Shaped it with the product team before building it
+
+The product team designed the prototype in Lovable. I worked through it with
+them: what belonged in the workspace and what didn't, how the flow should run
+from step to step, what the experience should feel like, and what it needed to
+be accessible. The prototype settled the product questions, so the build could
+focus on getting it right.
+
+<!-- TODO(vaibhav): one or two concrete examples of a change you argued for in the prototype (cut, added, reordered, an accessibility fix), and what changed because of it. -->
+
+### Directed AI agents instead of typing
+
+I didn't write the production code by hand, and it wasn't vibe-coded. I set
+the architecture, the conventions and the state rules, and split the work into
+scoped tasks for Claude Code subagents for planning, building, auditing and
+review. Every UI change went through build, audit and review before it was
+committed. The ten weeks went into deciding what to build, proving it against
+real data and absorbing changes, not into typing.
 
 ### Built it alongside the old tools, not in place of them
 
@@ -66,11 +90,12 @@ codebases for a while, and I chose to pay it.
 
 ### One wizard, thin adapters
 
-Before writing the second optimizer, I audited the two side by side. They
+Before building the second optimizer, I audited the two side by side. They
 differed at about seven points. So the wizard is a page shell (stepper, setup
 chips, step, footer) over four shared panels: constraints, cost rates, targets
-and review, about 3.3k lines in all. Each tool gets a thin adapter on top. The
-second tool was mostly extracted rather than written.
+and review. Each tool gets a thin adapter on top. The second tool was mostly
+extracted rather than written, and a change to a shared panel lands in every
+tool at once.
 
 ### One rule for where state lives
 
@@ -108,9 +133,9 @@ fix with a script that byte-compares the payload to an accepted one, and logged
 every field decision.
 
 The same habit caught a late change just before QA. A stored run showed a $3M
-budget had become $3 trillion, because the backend multiplies budgets by
-1,000,000. That was a contract ambiguity only real data could reveal. I
-reverted the change and recorded the evidence in the commit.
+budget had become $3 trillion, because the frontend and backend disagreed about
+the unit budgets are sent in. That was a contract ambiguity only real data
+could reveal. I reverted the change and recorded the evidence in the commit.
 
 Two rules came out of this. Rows are matched by their full hierarchy path,
 never by position, because API responses reorder rows. And a missing value
@@ -153,28 +178,25 @@ on QA before writing the code against it.
 
 ### Writing the decisions down
 
-The progress doc has a decision log of about 70 rows and 46 numbered backend
-questions, cited from code comments. There are also 21 convention rules. I cut
-the entry doc from 2,300 lines to about 400, and the other engineer adopted the
-docs. I also set up the AI-assisted workflow: Claude Code subagents for
-planning, building, auditing and review, with every UI change going through
-build, audit and review before commit.
+The progress doc holds a decision log, numbered backend questions cited from
+code comments, and the convention rules. I cut the entry doc to about a sixth
+of its length, and the other engineer adopted the docs.
 
 ## Result
 
 - **In production on 16 Oct 2026**, about ten weeks after the first commit,
-  with 17 QA tickets closed before launch.
-- **About 208 files and 35k lines** of TypeScript and React. I led it and wrote
-  most of it, about 80% by git blame. The consultant engineer built most of the
+  and in front of clients.
+- **Three tools became one workspace**, with drafts that save themselves and
+  plans that can be shared.
+- **I owned it from idea to launch.** The consultant engineer built most of the
   results pages and charts, the forecasting API integration, spreadsheet
   downloads and the early prototype of one tool.
-- **Real runs accepted** against the live contract, including a constraints run
-  on 228 features at level 5.
+- **Real runs accepted** against the live contract.
 - **The validator** went from 835 ms to 14 ms per keystroke at 3,000 rows (60×
   faster), and from 13 s to 45 ms at 12,000 (about 290×).
-- **Moving the prototype onto the shared panels**, a planned step, cut its code
-  by 25% (5,878 to 4,422 lines) and its bundle from 25.2 to 18.6 kB, made nine
-  components shared and fixed nested-landmark accessibility issues.
+- **Moving the prototype onto the shared panels**, a planned step, made nine
+  components shared, cut its bundle from 25.2 to 18.6 kB and fixed
+  nested-landmark accessibility issues.
 
 <!-- TODO(vaibhav): usage since launch, if you can share it (plans created, runs, client brands). -->
 
