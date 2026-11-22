@@ -8,6 +8,6 @@ export const education: EducationEntry[] = [
   {
     org: 'KIET Group of Institutions',
     title: 'B.Tech · Mechanical Engineering',
-    period: '2018 — 2022',
+    period: '2018 – 2022',
   },
 ];
