@@ -77,5 +77,22 @@ Set `SITE_URL` to the production origin (for example `https://your-domain.com`) 
 environment. It drives canonical URLs, absolute Open Graph URLs, the sitemap and the `Sitemap:`
 line in `robots.txt`. Without it the build still succeeds but skips those.
 
+### Hosting
+
+The site is fully static, so any static host works. Cloudflare (Pages, or Workers with static
+assets) or Vercel:
+
+| Setting | Value |
+| --- | --- |
+| Build command | `pnpm build` |
+| Output directory | `dist` |
+| `NODE_VERSION` | `22` |
+| `SITE_URL` | the free `*.pages.dev` / `*.vercel.app` URL until a domain is bought |
+
+pnpm is pinned through `packageManager` in `package.json`, so the host builds with the same
+version as local. GitHub Pages is not a good fit while the repo isn't named
+`<user>.github.io`: the site would be served under a subpath and every root-relative link would
+need Astro's `base`.
+
 The Open Graph image is `public/og.png`; its source is `tools/og.html`, with the command to
 regenerate it at the top of that file.
