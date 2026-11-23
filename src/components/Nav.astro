@@ -1,20 +1,14 @@
-<nav class="top">
+<nav class="top" aria-label="Primary">
   <div class="nav-inner">
-    <!-- <a class="brand" href="#"
-      ><span class="dot"></span>vs<span
-        style="color: var(--ink-3); font-weight: 400">/</span
-      >vaibhav</a
-    > -->
-
-    <a class="brand" href="#">vaibhav</a>
+    <a class="brand" href="/">vaibhav</a>
 
     <div class="nav-links">
-      <a href="#about" class="nav-a active">Home</a>
-      <a href="#projects" class="nav-a">Projects</a>
-      <a href="#writing" class="nav-a">Writing</a>
-      <a href="#more" class="nav-a">More</a>
+      <a href="/#projects" class="nav-a">Work</a>
+      <a href="/#experience" class="nav-a">Experience</a>
+      <a href="/#about" class="nav-a hide-sm">About</a>
+      <a href="/#connect" class="nav-a">Contact</a>
     </div>
-    <button class="theme-btn" id="theme" aria-label="Toggle theme">
+    <button type="button" class="theme-btn" id="theme" aria-label="Switch theme">
       <svg
         class="sun"
         viewBox="0 0 24 24"
@@ -58,10 +52,11 @@
     background: var(--nav-bg);
     border-bottom: 1px solid var(--rule-2);
   }
+  /* same column as <main>, so the brand lines up with the content below */
   .nav-inner {
-    max-width: 1080px;
+    max-width: var(--measure);
     margin: 0 auto;
-    padding: 14px clamp(40px, 10vw, 160px);
+    padding: 12px var(--gutter);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -77,13 +72,6 @@
     font-size: 18px;
     text-decoration: none;
     color: var(--ink);
-  }
-  .brand .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    background: var(--accent);
-    display: inline-block;
   }
   .nav-links {
     display: flex;
@@ -105,18 +93,6 @@
   .nav-links a:hover {
     color: var(--ink);
     background: var(--rule-2);
-  }
-  .nav-links a.active {
-    color: var(--ink);
-  }
-  .nav-links a.active::after {
-    content: "";
-    position: absolute;
-    left: 12px;
-    right: 12px;
-    bottom: 4px;
-    height: 1px;
-    background: var(--ink);
   }
   .theme-btn {
     width: 38px;
@@ -158,5 +134,19 @@
   }
   .theme-btn:active svg {
     transform: rotate(-30deg) scale(0.9);
+  }
+
+  @media (max-width: 560px) {
+    .brand {
+      font-size: 16px;
+    }
+    .nav-links a {
+      font-size: 12px;
+      padding: 8px 7px;
+    }
+    /* About is the lowest-priority link; drop it so the bar stays on one line */
+    .nav-links a.hide-sm {
+      display: none;
+    }
   }
 </style>

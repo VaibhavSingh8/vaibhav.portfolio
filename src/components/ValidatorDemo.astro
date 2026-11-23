@@ -1,0 +1,121 @@
+<!--
+  Interactive demo for the planning workspace case study. A markdown file opts
+  in with <div data-demo="validator"></div>; the script mounts into it. The DOM
+  is built at runtime, so every selector below is wrapped in :global().
+-->
+<script>import '../scripts/validator-demo.ts'</script>
+
+<style>
+  :global(.vdemo) {
+    margin: 24px 0;
+    padding: 20px;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: var(--card);
+  }
+  /* .vdemo.vdemo: the demo sits inside case-study .prose, whose p rules would win otherwise */
+  :global(.vdemo.vdemo .vdemo-title) {
+    font-weight: 600;
+    margin: 0;
+    color: var(--ink);
+  }
+  :global(.vdemo.vdemo .vdemo-note) {
+    font-size: 14px;
+    color: var(--ink-3);
+    margin: 4px 0 0;
+  }
+  :global(.vdemo-controls) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin-top: 16px;
+  }
+  :global(.vdemo fieldset) {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  :global(.vdemo legend) {
+    font-size: 13px;
+    color: var(--ink-3);
+    padding: 0;
+    margin-bottom: 6px;
+  }
+  :global(.vdemo-seg) {
+    display: inline-flex;
+    border: 1px solid var(--border-control);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  :global(.vdemo-seg label) {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 7px 11px;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  :global(.vdemo-seg label + label) {
+    border-left: 1px solid var(--border-control);
+  }
+  :global(.vdemo-seg input) {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  :global(.vdemo-seg label:has(input:checked)) {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  :global(.vdemo-seg label:has(input:focus-visible)) {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  :global(.vdemo-field) {
+    margin-top: 16px;
+  }
+  :global(.vdemo-field label) {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+  :global(.vdemo-field input) {
+    width: 100%;
+    max-width: 320px;
+    font: inherit;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 8px 10px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--border-control);
+    border-radius: 8px;
+  }
+  :global(.vdemo-out) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 16px 0 0;
+  }
+  :global(.vdemo-out div) {
+    padding: 10px 12px;
+    background: var(--bg-2);
+    border-radius: 8px;
+  }
+  :global(.vdemo-out dt) {
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  :global(.vdemo-out dd) {
+    margin: 2px 0 0;
+    font-family: var(--font-mono);
+    font-size: 18px;
+    color: var(--ink);
+  }
+  :global(.vdemo-out dd.slow) {
+    color: var(--accent-ink);
+  }
+</style>

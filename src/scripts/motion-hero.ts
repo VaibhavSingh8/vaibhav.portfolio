@@ -6,6 +6,16 @@ const nameEl = document.getElementById('name-glitch');
 if (nameEl && !reduced) {
   const text = nameEl.textContent ?? '';
   nameEl.textContent = '';
+
+  // Screen readers would announce one-letter spans letter by letter, so the
+  // animated letters are hidden from them and the name is kept whole beside.
+  const spoken = document.createElement('span');
+  spoken.className = 'sr-only';
+  spoken.textContent = text;
+  const visual = document.createElement('span');
+  visual.setAttribute('aria-hidden', 'true');
+  nameEl.append(spoken, visual);
+
   const letters = [...text].map((ch) => {
     const s = document.createElement('span');
     s.className = 'l';
@@ -14,7 +24,7 @@ if (nameEl && !reduced) {
     s.style.willChange = 'transform, opacity';
     s.style.opacity = '0';
     s.style.transform = 'translateY(8px)';
-    nameEl.appendChild(s);
+    visual.appendChild(s);
     return s;
   });
 

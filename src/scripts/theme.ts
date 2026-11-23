@@ -15,11 +15,20 @@ const themeBtn = document.getElementById('theme');
 const THEME_BG = { light: '#f6f5f0', dark: '#0f0f13' } as const;
 type Theme = keyof typeof THEME_BG;
 
-/* --- restore the saved theme ------------------------------------------- */
+/* --- current theme ------------------------------------------------------
+   The inline script in Layout.astro's <head> has already set data-theme
+   before first paint (saved choice, else the OS preference). */
 
-const saved = localStorage.getItem('portfolio-theme');
-const initial: Theme = saved === 'light' ? 'light' : 'dark';
-document.documentElement.dataset['theme'] = initial;
+const currentTheme = (): Theme =>
+  document.documentElement.dataset['theme'] === 'light' ? 'light' : 'dark';
+
+function labelButton(theme: Theme) {
+  themeBtn?.setAttribute(
+    'aria-label',
+    theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+  );
+}
+labelButton(currentTheme());
 
 /* --- click sound (delete this block if you don't want it) --------------- */
 
@@ -55,12 +64,30 @@ function playClick() {
 
 /* --- the toggle --------------------------------------------------------- */
 
+function applyTheme(theme: Theme) {
+  document.documentElement.dataset['theme'] = theme;
+  labelButton(theme);
+  try {
+    localStorage.setItem('portfolio-theme', theme);
+  } catch {
+    // storage blocked (private mode etc.) — the switch still works for this visit
+  }
+}
+
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
 function toggleTheme() {
   if (!wipe || !themeBtn) return;
   playClick();
 
-  const html = document.documentElement;
-  const next: Theme = html.dataset['theme'] === 'dark' ? 'light' : 'dark';
+  const next: Theme = currentTheme() === 'dark' ? 'light' : 'dark';
+
+  // no wipe for reduced motion: switch at once rather than wait out a
+  // transition the global reduced-motion rule has already collapsed
+  if (reducedMotion.matches) {
+    applyTheme(next);
+    return;
+  }
 
   // the panel is painted in the theme we're moving TO
   wipe.style.setProperty('--wipe-bg', THEME_BG[next]);
@@ -85,8 +112,7 @@ function toggleTheme() {
 
   // once the panel covers the page, swap the theme under it and clip it away
   window.setTimeout(() => {
-    html.dataset['theme'] = next;
-    localStorage.setItem('portfolio-theme', next);
+    applyTheme(next);
 
     wipe.style.clipPath = `circle(0 at ${x}px ${y}px)`;
     window.setTimeout(() => {

@@ -2,19 +2,53 @@
 interface Props {
   title?: string;
   description?: string;
+  /** 'article' for case studies */
+  type?: 'website' | 'article';
 }
 
 const {
-  title = 'Vaibhav Singh — Software Engineer',
-  description = 'Software engineer with 4 years building production web applications and AI platforms. Based in Bengaluru.',
+  title = 'Vaibhav Singh · Software Engineer (Full Stack)',
+  description = 'Fullstack software engineer in Bengaluru with 4+ years building data-heavy B2B AI products in React, Next.js, TypeScript, Python and FastAPI.',
+  type = 'website',
 } = Astro.props;
+
+// Absolute URLs need `site` (astro.config.mjs). Without it, skip the tags
+// that would otherwise point at the wrong origin.
+const site = Astro.site;
+const canonical = site ? new URL(Astro.url.pathname, site).href : undefined;
+const ogImage = site ? new URL('/og.png', site).href : undefined;
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Vaibhav Singh',
+  jobTitle: 'Software Engineer (Full Stack)',
+  worksFor: { '@type': 'Organization', name: 'DataPOEM' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Bengaluru', addressCountry: 'IN' },
+  sameAs: ['https://github.com/VaibhavSingh8'],
+  ...(site ? { url: site.href } : {}),
+};
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <!-- Runs before first paint so the page never flashes the wrong theme.
+         Must stay inline and blocking. theme.ts owns the toggle after this. -->
+    <script is:inline>
+      (function () {
+        var t = null;
+        try {
+          t = localStorage.getItem('portfolio-theme');
+        } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,10 +58,38 @@ const {
       href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=Bricolage+Grotesque:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap"
     />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Vaibhav Singh" />
+    <meta name="theme-color" content="#f6f5f0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f0f13" media="(prefers-color-scheme: dark)" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {site && <link rel="sitemap" href="/sitemap-index.xml" />}
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Vaibhav Singh" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="en_IN" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta property="og:image:width" content="1200" />}
+    {ogImage && <meta property="og:image:height" content="630" />}
+    {ogImage && (
+      <meta
+        property="og:image:alt"
+        content="Vaibhav Singh, fullstack software engineer. Case studies in data-heavy B2B AI products."
+      />
+    )}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(person)} />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <div class="frame" aria-hidden="true"></div>
     <div class="ambient" aria-hidden="true"></div>
     <div class="theme-wipe" id="wipe" aria-hidden="true"></div>
@@ -36,9 +98,6 @@ const {
 
     <script>
       import "../scripts/ambient.ts";
-    </script>
-    <script>
-      import "../scripts/interactions.ts";
     </script>
     <script>
       import "../scripts/motion-reveal.ts";
@@ -64,7 +123,7 @@ const {
     /* text */
     --ink: #141414; /* headings + body */
     --ink-2: #3a3a38; /* secondary copy */
-    --ink-3: #7a7a74; /* meta, labels, captions */
+    --ink-3: #666660; /* meta, labels, captions — 4.5:1 on every surface incl. hatch */
 
     /* lines + texture */
     --rule: rgba(20, 20, 20, 0.102); /* visible hairlines */
@@ -92,9 +151,11 @@ const {
     --shadow: 0 1px 0 rgba(20, 20, 20, 0.04), 0 1px 2px rgba(20, 20, 20, 0.04);
 
     /* layout */
-    --measure: 760px; /* content column width */
-    --gutter: clamp(16px, 4vw, 40px); /* space either side of the content */
-    --frame-inset: clamp(40px, 10vw, 160px); /* where the page rules sit */
+    --measure: 760px; /* the one column: nav, main and footer all use it */
+    --gutter: clamp(16px, 4vw, 40px); /* space between the column edge and its content */
+    /* the dashed page rules sit exactly on the column's outer edges */
+    /* % resolves against the fixed .frame (the viewport minus any scrollbar) */
+    --frame-inset: calc(50% - var(--measure) / 2);
 
     /* type */
     --font-sans: "Inter", system-ui, sans-serif;
@@ -115,7 +176,7 @@ const {
 
     --ink: #ededed;
     --ink-2: #b9b9bb;
-    --ink-3: #6e6e73;
+    --ink-3: #8a8a8f; /* 4.5:1 on every dark surface incl. hatch */
 
     --rule: rgba(255, 255, 255, 0.094);
     --rule-2: rgba(255, 255, 255, 0.047);
@@ -157,12 +218,56 @@ const {
     background-attachment: fixed;
     color: var(--ink);
     font-family: var(--font-sans);
-    font-size: 15px;
-    line-height: 1.55;
+    font-size: 16px;
+    line-height: 1.6;
     letter-spacing: -0.005em;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     overflow-x: hidden;
+  }
+
+  /* focus — one visible ring for every interactive element (SC 2.4.7, 2.4.13).
+     Components only override this when the ring needs to sit somewhere else. */
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* first focusable element on every page (SC 2.4.1) */
+  .skip-link {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 10000;
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--bg);
+    background: var(--ink);
+    border-radius: 8px;
+    text-decoration: none;
+    transform: translateY(-160%);
+  }
+  .skip-link:focus-visible {
+    transform: none;
+    outline-color: var(--accent);
+  }
+
+  /* hidden visually, still read by screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
   }
 
   /* ==========================================================
@@ -178,17 +283,50 @@ const {
     padding: 24px var(--gutter) 80px;
   }
 
+  main:focus {
+    outline: none;
+  }
+
   main section {
     margin-top: 36px;
     scroll-margin-top: 80px; /* so anchor links clear the sticky nav */
   }
 
+  /* Three tiers of section heading. Tier 1 (default) is for the work itself:
+     Selected work, Experience. Tier 2 is supporting context. Tier 3 is
+     reference detail that only needs a label. */
   main h2.section {
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+  }
+  main h2.section.t2 {
+    font-size: 24px;
     letter-spacing: -0.015em;
-    margin: 0 0 16px;
+  }
+  main h2.section.t3 {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  /* the one or two sentences under a section heading */
+  main .section-intro {
+    color: var(--ink-2);
+    font-size: 15px;
+    max-width: 40em;
+    margin: 0 0 20px;
+    text-wrap: pretty;
+  }
+
+  /* card -> case study: the title morphs across the page load where supported */
+  @view-transition {
+    navigation: auto;
   }
 
   /* ==========================================================
@@ -222,8 +360,6 @@ const {
     height: 140px;
     background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
     background-size: 12px 12px;
-    border-left: 1px dashed var(--rule);
-    border-right: 1px dashed var(--rule);
     mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
     -webkit-mask-image: radial-gradient(
       ellipse at center,
@@ -286,17 +422,26 @@ const {
      6. RESPONSIVE + MOTION PREFERENCES
      ========================================================== */
 
-  @media (max-width: 680px) {
-    main {
-      padding: 16px 20px 60px;
-    }
+  /* the rules need room outside the column, so drop them once it fills the screen */
+  @media (max-width: 840px) {
     .frame::before,
     .frame::after {
       display: none;
     }
   }
+  @media (max-width: 680px) {
+    main {
+      padding: 16px var(--gutter) 60px;
+    }
+    .dot-grid {
+      height: 64px;
+    }
+  }
 
   @media (prefers-reduced-motion: reduce) {
+    @view-transition {
+      navigation: none;
+    }
     *,
     *::before,
     *::after {
