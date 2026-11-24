@@ -6,7 +6,7 @@ export interface ExperienceEntry {
   period: string;
   /** one line, always visible */
   summary: string;
-  /** concrete, scoped results — shown when the row is open */
+  /** concrete, scoped results: shown when the row is open */
   highlights: string[];
   tags: string[];
   /** open by default */

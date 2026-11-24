@@ -21,7 +21,7 @@ const work = defineCollection({
     title: z.string(),
     /** small uppercase line above the title, e.g. "Backend migration · DataPOEM" */
     kicker: z.string(),
-    /** one or two sentences — this is what most people will actually read */
+    /** one or two sentences: this is what most people will actually read */
     summary: z.string(),
     /** the headline numbers, each with its scope */
     outcome: z.string(),

@@ -2,7 +2,7 @@ export interface ConnectLink {
   label: string;
   /** what the visitor sees: the address or handle, not a generic word */
   text: string;
-  /** null hides the chip until a real URL exists — never ship a dead `#` */
+  /** null hides the chip until a real URL exists; never ship a dead `#` */
   href: string | null;
   /** Raw SVG path string(s) to use as <path d="..."> inside a <svg viewBox="0 0 24 24"> */
   paths: string[];

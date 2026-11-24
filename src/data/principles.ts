@@ -1,7 +1,7 @@
 export interface Principle {
   /** the rule, in one line */
   rule: string;
-  /** what I actually did that shows it — every principle needs one */
+  /** what I actually did that shows it; every principle needs one */
   proof: string;
 }
 

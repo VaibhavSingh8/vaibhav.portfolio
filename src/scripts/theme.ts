@@ -1,7 +1,7 @@
 /**
  * Light/dark toggle.
  *
- * The switch itself is instant — what takes 700ms is the wipe: a full-screen
+ * The switch itself is instant; what takes 700ms is the wipe: a full-screen
  * panel painted in the NEXT theme's background colour, revealed with clip-path
  * from the toggle button. We flip `data-theme` when the panel fully covers the
  * page, then clip the panel back away.
@@ -58,7 +58,7 @@ function playClick() {
     osc.start(t);
     osc.stop(t + 0.15);
   } catch {
-    // audio unavailable — not worth doing anything about
+    // audio unavailable, not worth doing anything about
   }
 }
 
@@ -70,7 +70,7 @@ function applyTheme(theme: Theme) {
   try {
     localStorage.setItem('portfolio-theme', theme);
   } catch {
-    // storage blocked (private mode etc.) — the switch still works for this visit
+    // storage blocked (private mode etc.): the switch still works for this visit
   }
 }
 

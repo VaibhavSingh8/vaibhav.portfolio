@@ -28,8 +28,8 @@ document.querySelectorAll<HTMLElement>('.marquee').forEach((m) => {
 
    WCAG 2.2.2 (Pause, Stop, Hide) requires a real mechanism to stop
    content that moves for more than five seconds. Hover-to-pause does
-   not count — it is unreachable by keyboard and does not exist on
-   touch — so this button is the actual mechanism.
+   not count: it is unreachable by keyboard and does not exist on
+   touch, so this button is the actual mechanism.
 
    If the visitor prefers reduced motion we start paused, but leave the
    button working so they can opt back in.

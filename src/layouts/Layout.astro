@@ -118,12 +118,12 @@ const person = {
     --bg-2: #efede6;
     --card: #ffffff;
     --chip: #ffffff;
-    --bg-glow: none; /* extra depth behind the page — dark theme only */
+    --bg-glow: none; /* extra depth behind the page, dark theme only */
 
     /* text */
     --ink: #141414; /* headings + body */
     --ink-2: #3a3a38; /* secondary copy */
-    --ink-3: #666660; /* meta, labels, captions — 4.5:1 on every surface incl. hatch */
+    --ink-3: #666660; /* meta, labels, captions: 4.5:1 on every surface incl. hatch */
 
     /* lines + texture */
     --rule: rgba(20, 20, 20, 0.102); /* visible hairlines */
@@ -132,7 +132,7 @@ const person = {
     --hatch: rgba(20, 20, 20, 0.06);
     --grid-dot: rgba(20, 20, 20, 0.18);
 
-    /* accent — warm orange */
+    /* accent: warm orange */
     --accent: #d97e38;
     --accent-ink: #6a3d0a; /* accent used as text, so it needs contrast */
     --accent-soft: rgba(217, 126, 56, 0.18); /* cursor glow */
@@ -226,7 +226,7 @@ const person = {
     overflow-x: hidden;
   }
 
-  /* focus — one visible ring for every interactive element (SC 2.4.7, 2.4.13).
+  /* focus: one visible ring for every interactive element (SC 2.4.7, 2.4.13).
      Components only override this when the ring needs to sit somewhere else. */
   :focus-visible {
     outline: 2px solid var(--ink);
@@ -368,7 +368,7 @@ const person = {
     );
   }
 
-  /* soft glow that follows the cursor — position comes from ambient.ts */
+  /* soft glow that follows the cursor; position comes from ambient.ts */
   .ambient {
     position: fixed;
     left: 0;
