@@ -6,7 +6,9 @@ summary: >-
   Co-designed a workflow orchestration system on Temporal with two other
   engineers. I built the visual editor (React Flow) where a workflow is drawn rather
   than scripted, and the layer that runs the drawn workflow on Temporal.
-outcome: A manual process across several teams went from 3 days to under 5 hours
+outcome: >-
+  A manual process across several teams went from 3 days to under 5 hours ·
+  500+ long-running tasks a month
 role: Co-designer; built the visual editor and the layer that runs it
 team: 3 engineers
 # TODO(vaibhav): add a period; the brief only says "before March 2026".
@@ -20,8 +22,8 @@ order: 10
 
 ## Context
 
-<!-- TODO(vaibhav): what the process produced, in plain words; how often it
-     runs, and for how many client orgs. -->
+<!-- TODO(vaibhav): what the process produced, in plain words, and for how
+     many client orgs. -->
 
 ## The constraint
 
@@ -42,7 +44,8 @@ being available.
 
 ## Result
 
-A manual multi-team process went from 3 days to under 5 hours.
+- A manual multi-team process went from 3 days to under 5 hours.
+- The platform now runs 500+ long-running tasks a month.
 
 ## What I'd do differently
 
