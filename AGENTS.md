@@ -50,10 +50,10 @@ src/
 | `Hero.astro` | Avatar, name, lede, meta line, two calls to action |
 | `Projects.astro` | Case study cards and one-line expandable note rows, read from the `work` collection |
 | `Experience.astro` | Work history rows as `<details>`/`<summary>`, closed by default |
-| `About.astro` | Two bio paragraphs, then education and outside-work lines |
+| `About.astro` | Two bio paragraphs, then the education line |
 | `Stack.astro` | Two-row marquee carousel + pause control |
 | `Connect.astro` | Contact: one aligned list of channels (email first, with a copy button), availability line with pulse dot |
-| `Footer.astro` | Copyright + pixel cat SVG |
+| `Footer.astro` | Copyright + the pixel cat: a button that cycles through real outside-work scenes with a caption |
 | `ValidatorDemo.astro` | Interactive demo, mounted into `<div data-demo="validator">` in case study markdown |
 
 ### Data Files (`src/data/`)

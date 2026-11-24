@@ -28,10 +28,10 @@ src/
 │   ├── Hero.astro            # Avatar, name, lede, calls to action
 │   ├── Projects.astro        # Case study cards + expandable note rows
 │   ├── Experience.astro      # Work history rows (<details>)
-│   ├── About.astro           # Bio, education and outside-work lines
+│   ├── About.astro           # Bio and education line
 │   ├── Stack.astro           # Marquee tech stack carousel + pause control
 │   ├── Connect.astro         # Contact
-│   ├── Footer.astro          # Copyright + pixel cat
+│   ├── Footer.astro          # Copyright + pet-the-cat scenes
 │   └── ValidatorDemo.astro   # Interactive demo for the planning workspace case study
 ├── data/
 │   ├── stack.ts              # StackChip[] per carousel row
