@@ -41,7 +41,7 @@ export const experience: ExperienceEntry[] = [
     summary:
       'A frontend title, but the work went fullstack: an identity migration, workflow orchestration and security fixes.',
     highlights: [
-      'Co-designed a workflow orchestration system with two other engineers and built its visual editor, where a workflow is drawn instead of scripted. A manual process across several teams went from 3 days to under 5 hours.',
+      'Co-designed a workflow orchestration system with two other engineers and built its visual editor, where a workflow is drawn instead of scripted. A manual process across several teams went from 3 days to under 5 hours, and the platform now runs 500+ long-running tasks a month.',
       'Led the migration of the identity service from Java Spring Boot to FastAPI: about two months to production. The other engineers were consultants new to the platform, so I set the order of work, made the architectural calls, reviewed the port and planned the go-live.',
       'Proposed moving the platform from Vue 2 to Next.js and migrated one module: its JS payload fell 81% and Lighthouse performance went from 65 to 98. The migration as a whole cut total JS by 80%.',
       'Remediated findings from an external security audit, with no recurrence in the next audit.',
