@@ -26,23 +26,18 @@ src/
 ├── components/
 │   ├── Nav.astro             # Sticky nav, theme toggle
 │   ├── Hero.astro            # Avatar, name, lede, calls to action
-│   ├── Hatch.astro           # Section dividers
-│   ├── Projects.astro        # Case study cards + note rows
+│   ├── Projects.astro        # Case study cards + expandable note rows
 │   ├── Experience.astro      # Work history rows (<details>)
-│   ├── Principles.astro      # How I work: principle + proof
-│   ├── About.astro           # Bio, "currently" list
+│   ├── About.astro           # Bio, education and outside-work lines
 │   ├── Stack.astro           # Marquee tech stack carousel + pause control
-│   ├── Education.astro       # Education
 │   ├── Connect.astro         # Contact
-│   ├── Quote.astro           # Pull quote
 │   ├── Footer.astro          # Copyright + pixel cat
 │   └── ValidatorDemo.astro   # Interactive demo for the planning workspace case study
 ├── data/
 │   ├── stack.ts              # StackChip[] per carousel row
 │   ├── experience.ts         # ExperienceEntry[] (org, title, period, summary, highlights)
-│   ├── education.ts          # EducationEntry[] (org, title, period)
-│   ├── connect.ts            # ConnectLink[] (label, href | null, icon paths)
-│   └── principles.ts         # Principle[] (rule, proof)
+│   ├── education.ts          # EducationEntry[] (org, title, period), shown in About
+│   └── connect.ts            # ConnectLink[] (label, text, href | null, icon paths)
 └── scripts/
     ├── theme.ts              # Theme toggle, wipe animation, click sound
     ├── ambient.ts            # Cursor glow via CSS vars
