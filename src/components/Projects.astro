@@ -8,11 +8,6 @@ entries.sort((a, b) => a.data.order - b.data.order);
 
 const caseStudies = entries.filter((e) => e.data.format === 'case-study');
 const notes = entries.filter((e) => e.data.format === 'note');
-/* the first few notes show; the rest wait behind a disclosure so the case
-   studies stay the heaviest thing in the section */
-const NOTES_SHOWN = 4;
-const shownNotes = notes.slice(0, NOTES_SHOWN);
-const moreNotes = notes.slice(NOTES_SHOWN);
 
 /** "a · b · c" in frontmatter -> a list of figures, each keeping its scope */
 const figures = (outcome: string) => outcome.split(' · ').map((f) => f.trim());
@@ -21,9 +16,8 @@ const figures = (outcome: string) => outcome.split(' · ').map((f) => f.trim());
 <section id="projects">
   <h2 class="section">Selected work</h2>
   <p class="section-intro">
-    Most of my work is behind enterprise SSO, so it lives here as write-ups
-    rather than repositories. Clients are anonymised and company internals are
-    left out.
+    Most of my work sits behind enterprise sign-in, so it's written up here
+    instead. Clients are anonymised.
   </p>
 
   <div class="projects">
@@ -39,7 +33,6 @@ const figures = (outcome: string) => outcome.split(' · ').map((f) => f.trim());
             {entry.data.title}
           </a>
         </h3>
-        <p class="summary">{entry.data.summary}</p>
         <ul class="figures">
           {figures(entry.data.outcome).map((f) => <li>{f}</li>)}
         </ul>
@@ -50,36 +43,22 @@ const figures = (outcome: string) => outcome.split(' · ').map((f) => f.trim());
 
   {notes.length > 0 && (
     <>
-      <h3 class="sub">Also</h3>
-      <ul class="notes">
-        {shownNotes.map((entry) => (
-          <li class="note">
-            <p class="note-title">
-              {entry.data.title}
+      <h3 class="sub">Smaller pieces</h3>
+      <div class="notes">
+        {notes.map((entry) => (
+          <details class="note">
+            <summary>
+              <span class="note-title">{entry.data.title}</span>
               {entry.data.status !== 'shipped' && <span class="status">{entry.data.status}</span>}
-            </p>
-            <p class="note-summary">{entry.data.summary}</p>
-            <p class="note-outcome">{entry.data.outcome}</p>
-          </li>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="note-body">
+              <p class="note-summary">{entry.data.summary}</p>
+              <p class="note-outcome">{entry.data.outcome}</p>
+            </div>
+          </details>
         ))}
-      </ul>
-      {moreNotes.length > 0 && (
-        <details class="more">
-          <summary>{moreNotes.length} more</summary>
-          <ul class="notes">
-            {moreNotes.map((entry) => (
-              <li class="note">
-                <p class="note-title">
-                  {entry.data.title}
-                  {entry.data.status !== 'shipped' && <span class="status">{entry.data.status}</span>}
-                </p>
-                <p class="note-summary">{entry.data.summary}</p>
-                <p class="note-outcome">{entry.data.outcome}</p>
-              </li>
-            ))}
-          </ul>
-        </details>
-      )}
+      </div>
     </>
   )}
 </section>
@@ -150,12 +129,6 @@ const figures = (outcome: string) => outcome.split(' · ').map((f) => f.trim());
   h3 a:focus-visible {
     outline: none;
   }
-  .summary {
-    color: var(--ink-2);
-    font-size: 15px;
-    margin: 10px 0 0;
-    text-wrap: pretty;
-  }
   .figures {
     list-style: none;
     display: flex;
@@ -168,8 +141,10 @@ const figures = (outcome: string) => outcome.split(' · ').map((f) => f.trim());
     font-family: var(--font-mono);
     font-size: 12px;
     color: var(--ink);
-    padding: 5px 9px;
-    background: var(--bg-2);
+    padding: 4px 9px;
+    /* page colour inset into the card, so chips read in both themes */
+    background: var(--bg);
+    border: 1px solid var(--rule-2);
     border-radius: 6px;
   }
   .cta {
@@ -183,71 +158,82 @@ const figures = (outcome: string) => outcome.split(' · ').map((f) => f.trim());
     color: var(--accent-ink);
   }
 
-  /* everything else: plain rows, because none of them is clickable */
+  /* smaller pieces: one line each, detail on demand */
   h3.sub {
     font-family: var(--font-sans);
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0;
     color: var(--ink-3);
-    margin: 40px 0 0;
-  }
-  .notes {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    margin: 48px 0 4px;
   }
   .note {
-    padding: 16px 0;
     border-bottom: 1px solid var(--rule-2);
+    interpolate-size: allow-keywords;
   }
   .note:last-child {
     border-bottom: none;
   }
-  .note-title {
+  .note summary {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    font-size: 16px;
-    margin: 0;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .note summary::-webkit-details-marker {
+    display: none;
+  }
+  .note-title {
+    font-size: 15.5px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .plus {
+    margin-left: auto;
+    flex: none;
+    width: 16px;
+    text-align: center;
+    font-family: var(--font-mono);
+    color: var(--ink-3);
+  }
+  .plus::before {
+    content: "+";
+  }
+  .note[open] .plus::before {
+    content: "−";
+  }
+  .note summary:hover .note-title {
+    text-decoration: underline;
+    text-decoration-color: var(--border-control);
+    text-underline-offset: 4px;
+  }
+  .note::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      content-visibility 0.3s allow-discrete;
+  }
+  .note[open]::details-content {
+    block-size: auto;
+  }
+  .note-body {
+    padding: 0 0 16px;
+    max-width: 40em;
   }
   .note-summary {
     font-size: 15px;
     color: var(--ink-2);
-    margin: 4px 0 0;
+    margin: 0;
     text-wrap: pretty;
-  }
-  .more summary {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 32px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--ink-2);
-    cursor: pointer;
-    list-style: none;
-  }
-  .more summary::-webkit-details-marker {
-    display: none;
-  }
-  .more summary::after {
-    content: "+";
-    font-family: var(--font-mono);
-    color: var(--ink-3);
-  }
-  .more[open] summary::after {
-    content: "−";
-  }
-  .more summary:hover {
-    color: var(--ink);
   }
   .note-outcome {
     font-family: var(--font-mono);
     font-size: 12px;
     color: var(--ink-3);
-    margin: 6px 0 0;
+    margin: 8px 0 0;
   }
 </style>
