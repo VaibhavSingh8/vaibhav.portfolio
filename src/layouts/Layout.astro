@@ -61,7 +61,7 @@ const person = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Vaibhav Singh" />
-    <meta name="theme-color" content="#f6f5f0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#f7f7f7" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f0f13" media="(prefers-color-scheme: dark)" />
     {canonical && <link rel="canonical" href={canonical} />}
     {site && <link rel="sitemap" href="/sitemap-index.xml" />}
@@ -114,21 +114,23 @@ const person = {
 
   :root {
     /* surfaces */
-    --bg: #f6f5f0;
-    --bg-2: #efede6;
+    /* neutral off-white page with pure white cards: softer than a white page,
+       and the white cards keep the eye's sense of "white" anchored */
+    --bg: #f7f7f7;
+    --bg-2: #efefef;
     --card: #ffffff;
     --chip: #ffffff;
     --bg-glow: none; /* extra depth behind the page, dark theme only */
 
     /* text */
     --ink: #141414; /* headings + body */
-    --ink-2: #3a3a38; /* secondary copy */
-    --ink-3: #666660; /* meta, labels, captions: 4.5:1 on every surface incl. hatch */
+    --ink-2: #3a3a3a; /* secondary copy */
+    --ink-3: #666666; /* meta, labels, captions: 4.5:1 on every surface (5.0:1 on --bg-2) */
 
     /* lines + texture */
-    --rule: rgba(20, 20, 20, 0.102); /* visible hairlines */
-    --rule-2: rgba(20, 20, 20, 0.055); /* barely-there dividers */
-    --border-control: #8c8c85; /* borders on buttons + links: WCAG 1.4.11 wants 3:1 */
+    --rule: rgba(0, 0, 0, 0.1); /* visible hairlines */
+    --rule-2: rgba(0, 0, 0, 0.06); /* barely-there dividers */
+    --border-control: #888888; /* borders on buttons + links: WCAG 1.4.11 wants 3:1 */
     --hatch: rgba(20, 20, 20, 0.06);
     --grid-dot: rgba(20, 20, 20, 0.18);
 
@@ -144,8 +146,8 @@ const person = {
     --live-ring: rgba(44, 167, 108, 0.25);
 
     /* translucent surfaces (same colour as --bg, just see-through) */
-    --nav-bg: rgba(246, 245, 240, 0.75);
-    --overlay-bg: rgba(246, 245, 240, 0.86);
+    --nav-bg: rgba(247, 247, 247, 0.75);
+    --overlay-bg: rgba(247, 247, 247, 0.86);
     --card-soft: rgba(255, 255, 255, 0.8);
 
     --shadow: 0 1px 0 rgba(20, 20, 20, 0.04), 0 1px 2px rgba(20, 20, 20, 0.04);
@@ -287,8 +289,9 @@ const person = {
     outline: none;
   }
 
+  /* space is the only separator between sections */
   main section {
-    margin-top: 36px;
+    margin-top: clamp(80px, 12vw, 128px);
     scroll-margin-top: 80px; /* so anchor links clear the sticky nav */
   }
 

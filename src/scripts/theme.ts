@@ -12,7 +12,7 @@ const WIPE_MS = 700;
 const wipe = document.getElementById('wipe');
 const themeBtn = document.getElementById('theme');
 
-const THEME_BG = { light: '#f6f5f0', dark: '#0f0f13' } as const;
+const THEME_BG = { light: '#f7f7f7', dark: '#0f0f13' } as const;
 type Theme = keyof typeof THEME_BG;
 
 /* --- current theme ------------------------------------------------------

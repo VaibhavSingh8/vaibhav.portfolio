@@ -48,16 +48,12 @@ src/
 | --- | --- |
 | `Nav.astro` | Sticky nav, theme toggle |
 | `Hero.astro` | Avatar, name, lede, meta line, two calls to action |
-| `Hatch.astro` | Section dividers — plain dashed rule, no props |
-| `Projects.astro` | Case study cards and note rows, read from the `work` collection |
-| `Experience.astro` | Work history rows as `<details>`/`<summary>` |
-| `Principles.astro` | "How I work": each principle with its proof |
-| `About.astro` | Bio paragraphs, "currently" list |
+| `Projects.astro` | Case study cards and one-line expandable note rows, read from the `work` collection |
+| `Experience.astro` | Work history rows as `<details>`/`<summary>`, closed by default |
+| `About.astro` | Two bio paragraphs, then the education line |
 | `Stack.astro` | Two-row marquee carousel + pause control |
-| `Education.astro` | Education, one line per entry |
 | `Connect.astro` | Contact: one aligned list of channels (email first, with a copy button), availability line with pulse dot |
-| `Quote.astro` | Pull quote |
-| `Footer.astro` | Copyright + pixel cat SVG |
+| `Footer.astro` | Copyright + the pixel cat: a button that cycles through real outside-work scenes with a caption |
 | `ValidatorDemo.astro` | Interactive demo, mounted into `<div data-demo="validator">` in case study markdown |
 
 ### Data Files (`src/data/`)
@@ -66,9 +62,8 @@ Edit these to update content — no component HTML changes needed:
 
 - `stack.ts` — `StackChip[]` grouped by row (`1 | 2 | 3`)
 - `experience.ts` — `ExperienceEntry[]` (org, location, title, type, period, summary, highlights, tags)
-- `education.ts` — `EducationEntry[]` (org, title, period)
+- `education.ts` — `EducationEntry[]` (org, title, period), rendered inside `About.astro`
 - `connect.ts` — `ConnectLink[]` (label, text, href, paths, filled). `text` is the address or handle shown to visitors. `href: null` hides the link; never ship `#`.
-- `principles.ts` — `Principle[]` (rule, proof). Every principle needs real proof.
 
 ### Scripts (`src/scripts/`)
 
@@ -97,17 +92,24 @@ Each script is imported by exactly one component (or Layout):
 - Accent: `--accent`, `--accent-ink`, `--accent-soft`, `--accent-faint`, `--accent-edge`.
 - Translucent surfaces: `--nav-bg`, `--overlay-bg`, `--card-soft`. Also `--live`, `--live-ring`, `--shadow`, `--hatch`, `--grid-dot`.
 - Layout: `--measure` (the one column — nav, main and footer all align to it), `--gutter`, `--frame-inset` (derived from `--measure`; the page rules sit on the column edges).
-- Typography lives in three CSS vars, never hardcode a font string in a component: `--font-sans` (Inter — body copy, labels), `--font-mono` (IBM Plex Mono — meta text, tags, terminal-style bits), `--font-display` (Bricolage Grotesque — section headers, hero name, italic accent moments like the "currently" widget values and pull quote).
-- For a repeated-row layout that needs columns to align across rows (see `About.astro`'s `.currently` widget), make the parent `display: grid` with the real column tracks and give each row `grid-template-columns: subgrid; grid-column: 1 / -1`. Do not give each row its own independent `grid-template-columns` — the tracks size per-row instead of sharing one layout, which misaligns content across rows.
+- Typography lives in three CSS vars, never hardcode a font string in a component: `--font-sans` (Inter — body copy, labels), `--font-mono` (IBM Plex Mono — meta text, tags, terminal-style bits), `--font-display` (Bricolage Grotesque — section headers, hero name, section and case study titles).
+- For a repeated-row layout that needs columns to align across rows (see `About.astro`'s `.facts` list or `Connect.astro`'s `.channels`), make the parent `display: grid` with the real column tracks and give each row `grid-template-columns: subgrid; grid-column: 1 / -1`. Do not give each row its own independent `grid-template-columns` — the tracks size per-row instead of sharing one layout, which misaligns content across rows.
 
 ### Design
 
 The site should read as hand-made and specific, not templated. Keep it that way:
 
-- **Three tiers of section.** Tier 1 (`h2.section`) is the work itself: Selected work and
-  Experience, which come first. Tier 2 (`h2.section.t2`) is supporting context. Tier 3
-  (`h2.section.t3`) is reference detail that only needs a label. Use `.section-intro` for the
-  sentence under a heading.
+- **The home page is an index, not the content.** Six sections: hero, Selected work, Experience,
+  About, Stack, Contact. Detail lives on case study pages and inside expandable rows. Before
+  adding a section, ask whether it can be a line in an existing one.
+- **Tiers of section.** Tier 1 (`h2.section`) is the work itself: Selected work and Experience,
+  which come first. Tier 2 (`h2.section.t2`) is supporting context. (`h2.section.t3` exists for
+  reference detail that only needs a label.) Use `.section-intro` for the sentence under a heading.
+- **Space separates sections**, not rules or dividers. The gap is set once on `main section` in
+  `Layout.astro`.
+- **No generic portfolio furniture:** no "how I work" lists, famous-engineer quotes or
+  skills-as-bars. Principles show up inside the case studies, with their proof.
+- **Light theme is neutral off-white** (`--bg: #f7f7f7`) with pure white cards, not beige.
 - **Cards are for things you can click.** A bordered, filled box means "this is a link". Lists of
   non-clickable things are plain rows with hairline dividers.
 - **Mono is for metadata only:** dates, figures, tags, the brand. Body copy, labels and kickers are

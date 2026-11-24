@@ -1,10 +1,5 @@
 ---
-const currently = [
-  { k: 'Building', v: 'A prompt manager', d: 'a Chrome extension that carries context across AIs' },
-  { k: 'Exploring', v: 'AI tools and APIs', d: 'Claude, GPT, building and breaking things' },
-  { k: 'Training', v: 'Gym and badminton', d: 'gym 5×, badminton 2×' },
-  { k: 'Listening', v: 'Lo-fi work music', d: 'always on, no distractions' },
-];
+import { education } from '../data/education';
 ---
 
 <section id="about">
@@ -12,36 +7,27 @@ const currently = [
   <div class="prose">
     <p>
       At DataPOEM I work on an enterprise decision AI platform that large
-      consumer brands use to plan and optimize marketing budgets. I own the
-      identity platform, lead the frontend, and build features and core services
-      that clients use in production. Most recently I took an AI planning workspace from the
-      product team's idea to launch.
+      consumer brands use to plan their marketing budgets. I own the identity
+      platform, lead the frontend, and build features and core services that
+      clients use in production.
     </p>
     <p>
-      What I care about: systems that stay correct under pressure, interfaces
-      that stay fast at real data volumes, and codebases that are easier to work
-      in after I've touched them.
-    </p>
-    <p>
-      I came to software from mechanical engineering. I spent two and a half
-      years at TCS supporting enterprise data-science platforms on Azure, then
-      asked to move into React development. I joined DataPOEM with a frontend
-      title, the work went fullstack, and the title caught up in April 2026.
+      I came to software from mechanical engineering. At TCS I went from
+      testing to cloud platform support, then asked to move into React. I
+      joined DataPOEM with a frontend title, the work went fullstack, and the
+      title caught up in April 2026.
     </p>
   </div>
 
-  <h3 class="sub">Currently</h3>
-  <dl class="currently">
-    {currently.map((c) => (
-      <div class="row">
-        <dt>{c.k}</dt>
-        <dd>
-          <span class="v">{c.v}</span>
-          <span class="d">{c.d}</span>
-        </dd>
-      </div>
+  <ul class="facts">
+    {education.map((e) => (
+      <li>
+        <span class="k">Studied</span>
+        <span>{e.title}, {e.org}</span>
+        <span class="when">{e.period}</span>
+      </li>
     ))}
-  </dl>
+  </ul>
 </section>
 
 <style>
@@ -54,57 +40,40 @@ const currently = [
   .prose p:last-child {
     margin-bottom: 0;
   }
-  h3.sub {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--ink-3);
-    margin: 32px 0 4px;
-  }
   /* subgrid so the label column lines up across rows */
-  .currently {
+  .facts {
+    list-style: none;
     display: grid;
-    grid-template-columns: 96px minmax(0, 1fr);
-    margin: 0;
+    grid-template-columns: 108px minmax(0, 1fr) auto;
+    column-gap: 20px;
+    padding: 0;
+    margin: 28px 0 0;
+    font-size: 15px;
+    color: var(--ink-2);
   }
-  .row {
+  .facts li {
     display: grid;
     grid-template-columns: subgrid;
     grid-column: 1 / -1;
-    gap: 16px;
-    padding: 11px 0;
-    border-bottom: 1px solid var(--rule-2);
+    padding: 10px 0;
+    border-top: 1px solid var(--rule-2);
   }
-  .row:last-child {
-    border-bottom: none;
-  }
-  dt {
+  .k {
     font-size: 14px;
     color: var(--ink-3);
   }
-  dd {
-    margin: 0;
-    font-size: 15px;
-  }
-  .v {
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .d {
+  .when {
+    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--ink-3);
-  }
-  .d::before {
-    content: " · ";
+    align-self: center;
   }
   @media (max-width: 560px) {
-    .currently {
-      grid-template-columns: 80px minmax(0, 1fr);
+    .facts {
+      grid-template-columns: minmax(0, 1fr) auto;
     }
-    .d {
-      display: block;
-      font-size: 14px;
-    }
-    .d::before {
-      content: none;
+    .k {
+      grid-column: 1 / -1;
     }
   }
 </style>
