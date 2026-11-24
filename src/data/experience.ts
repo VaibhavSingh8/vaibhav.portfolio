@@ -31,7 +31,6 @@ export const experience: ExperienceEntry[] = [
       'Lead the frontend: review decisions and changes before they go live.',
     ],
     tags: ['Next.js', 'React', 'TypeScript', 'Python', 'FastAPI', 'AWS', 'Stripe'],
-    open: true,
   },
   {
     org: 'DataPOEM',
