@@ -18,7 +18,7 @@ function show(el: HTMLElement) {
 
 if (!reduced) {
   const targets = [
-    ...document.querySelectorAll<HTMLElement>('main > section, main > .hatch, footer'),
+    ...document.querySelectorAll<HTMLElement>('main > section, footer'),
   ].filter((el) => el.getBoundingClientRect().top > window.innerHeight);
 
   for (const el of targets) {
