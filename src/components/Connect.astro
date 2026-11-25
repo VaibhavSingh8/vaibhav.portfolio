@@ -184,8 +184,8 @@ const topics = [
     // for people whose mail lives in a browser tab: same email, opened in Gmail's composer
     const gmail = form.querySelector<HTMLAnchorElement>('.gmail');
     if (gmail) {
-      const q = new URLSearchParams({ view: 'cm', fs: '1', to, su: subject, body });
-      gmail.href = `https://mail.google.com/mail/?${q.toString()}`;
+      const e = encodeURIComponent; // %20 for spaces, not "+", so every client reads them right
+      gmail.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${e(to)}&su=${e(subject)}&body=${e(body)}`;
     }
     const fallback = form.querySelector<HTMLElement>('.fallback');
     if (fallback) fallback.hidden = false;
