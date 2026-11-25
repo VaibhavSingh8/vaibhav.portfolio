@@ -232,11 +232,14 @@ const topics = [
   textarea:hover {
     border-bottom-color: var(--ink-3);
   }
+  /* the blank itself shows focus: solid accent line plus a faint tint, instead of the
+     global ring boxing the whole field */
   .sentence input:focus-visible,
   .sentence select:focus-visible,
   textarea:focus-visible {
-    border-bottom-style: solid;
-    border-bottom-color: var(--accent);
+    outline: none;
+    border-bottom: 2px solid var(--accent);
+    background: var(--accent-faint);
   }
   .pick {
     position: relative;
@@ -263,9 +266,54 @@ const topics = [
     transform: translateY(-70%) rotate(45deg);
     pointer-events: none;
   }
+  /* the menu reads at body size, not at the sentence's display size */
   .sentence select option {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0;
     color: var(--ink);
     background: var(--card);
+  }
+  @supports (appearance: base-select) {
+    .sentence select,
+    .sentence select::picker(select) {
+      appearance: base-select;
+    }
+    .sentence select::picker-icon {
+      display: none;
+    }
+    .sentence select::picker(select) {
+      /* open below the blank; flip up only when it doesn't fit (the default
+         picks whichever side has more room, which covers the heading) */
+      position-try-order: normal;
+      margin-block: 6px;
+      padding: 6px;
+      background: var(--card);
+      color: var(--ink);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .sentence select option {
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: transparent;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .sentence select option:hover,
+    .sentence select option:focus-visible {
+      background: var(--bg-2);
+      outline: none;
+    }
+    .sentence select option:checked {
+      color: var(--accent-ink);
+      font-weight: 500;
+    }
+    .sentence select option::checkmark {
+      display: none;
+    }
   }
   textarea {
     display: block;
