@@ -31,6 +31,17 @@ export const connectLinks: ConnectLink[] = [
     filled: true,
   },
   {
+    label: 'Instagram',
+    text: '@whyvaibhavv',
+    href: 'https://www.instagram.com/whyvaibhavv/',
+    paths: [
+      'M3 7.5A4.5 4.5 0 0 1 7.5 3h9A4.5 4.5 0 0 1 21 7.5v9a4.5 4.5 0 0 1-4.5 4.5h-9A4.5 4.5 0 0 1 3 16.5v-9Z',
+      'M12 8.25a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5Z',
+      'M17.25 6.75h.01',
+    ],
+    filled: false,
+  },
+  {
     label: 'LinkedIn',
     text: 'LinkedIn',
     // TODO(vaibhav): add your LinkedIn profile URL. Hidden until then.
