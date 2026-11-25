@@ -20,7 +20,7 @@ const topics = [
   <p class="section-intro">Fill in the blanks and your mail app opens with the email already written.</p>
 
   {email && (
-    <form class="note" data-to={email.text}>
+    <form class="note" data-to={email.text} novalidate>
       <p class="sentence">
         Hi Vaibhav, this is
         <label class="sr-only" for="note-name">Your name</label>
@@ -31,6 +31,7 @@ const topics = [
           placeholder="your name"
           required
           maxlength="60"
+          aria-describedby="note-hint"
         />, and I'm
         <label class="sr-only" for="note-topic">Why you're writing</label>
         <span class="pick">
@@ -39,6 +40,7 @@ const topics = [
           </select>
         </span>.
       </p>
+      <p class="hint" id="note-hint" aria-live="polite"></p>
       <label class="sr-only" for="note-more">Anything else (optional)</label>
       <textarea id="note-more" name="more" rows="1" maxlength="1200" placeholder="Anything else? (optional)"></textarea>
 
@@ -60,9 +62,10 @@ const topics = [
       </div>
 
       <p class="fallback" hidden>
-        Mail app didn't open?
+        Mail app didn't open? Write it in
+        <a class="gmail" href="https://mail.google.com/" target="_blank" rel="noopener">Gmail</a>
+        or
         <button type="button" class="copy copy-note">Copy the message</button>
-        and paste it into an email to me.
       </p>
     </form>
   )}
@@ -149,15 +152,41 @@ const topics = [
     copy(copyNote, `${subject}\n\n${body}`, 'Message copied');
   });
 
+  // our own validation instead of the browser bubble: say it in the page's voice, nudge the blank
+  const nameField = form?.querySelector<HTMLInputElement>('#note-name');
+  const hint = form?.querySelector<HTMLElement>('.hint');
+  const setInvalid = (on: boolean) => {
+    if (!nameField || !hint) return;
+    nameField.toggleAttribute('aria-invalid', on);
+    hint.textContent = on ? "Add your name first, so I know who's writing." : '';
+  };
+  nameField?.addEventListener('input', () => {
+    if (nameField.value.trim()) setInvalid(false);
+  });
+
   form?.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!to) return;
+    if (nameField && !nameField.value.trim()) {
+      setInvalid(true);
+      nameField.focus();
+      nameField.classList.remove('wiggle');
+      void nameField.offsetWidth; // restart the wiggle
+      nameField.classList.add('wiggle');
+      return;
+    }
     const { subject, body } = compose();
     const plane = form.querySelector('.plane');
     plane?.classList.remove('fly');
     void plane?.getBoundingClientRect(); // restart the flight
     plane?.classList.add('fly');
     window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    // for people whose mail lives in a browser tab: same email, opened in Gmail's composer
+    const gmail = form.querySelector<HTMLAnchorElement>('.gmail');
+    if (gmail) {
+      const q = new URLSearchParams({ view: 'cm', fs: '1', to, su: subject, body });
+      gmail.href = `https://mail.google.com/mail/?${q.toString()}`;
+    }
     const fallback = form.querySelector<HTMLElement>('.fallback');
     if (fallback) fallback.hidden = false;
   });
@@ -415,6 +444,40 @@ const topics = [
   .copy:hover {
     color: var(--ink);
   }
+  .hint {
+    font-size: 14px;
+    color: var(--accent-ink);
+    margin: 6px 0 0;
+  }
+  .hint:empty {
+    display: none;
+  }
+  .sentence input[aria-invalid] {
+    border-bottom: 2px solid var(--accent);
+  }
+  .wiggle {
+    animation: wiggle 0.4s ease-in-out;
+  }
+  @keyframes wiggle {
+    20%,
+    60% {
+      transform: translateX(-4px);
+    }
+    40%,
+    80% {
+      transform: translateX(4px);
+    }
+  }
+  .fallback a {
+    color: var(--ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--border-control);
+    text-underline-offset: 4px;
+  }
+  .fallback a:hover {
+    color: var(--ink);
+    text-decoration-color: var(--accent);
+  }
   .fallback {
     display: flex;
     flex-wrap: wrap;
@@ -512,6 +575,7 @@ const topics = [
     }
   }
   @media (prefers-reduced-motion: reduce) {
+    .wiggle,
     .plane,
     .plane.fly {
       transition: none;
