@@ -52,7 +52,7 @@ src/
 | `Experience.astro` | Work history rows as `<details>`/`<summary>`, closed by default |
 | `About.astro` | Two bio paragraphs, then the education line |
 | `Stack.astro` | Two-row marquee carousel + pause control |
-| `Connect.astro` | Contact: the email address as a large display link with a copy button, the other channels on one line under it, then availability (pulse dot) and live Bengaluru time |
+| `Connect.astro` | Contact: a fill-in-the-blanks sentence that opens a prewritten email (with a copy fallback), the address with a copy button, the other channels on one line, then availability (pulse dot) and live Bengaluru time |
 | `Footer.astro` | Copyright + the pixel cat: a button that cycles through real outside-work scenes with a caption |
 | `ValidatorDemo.astro` | Interactive demo, mounted into `<div data-demo="validator">` in case study markdown |
 

@@ -1,23 +1,70 @@
 ---
 import { connectLinks } from '../data/connect.ts';
 
-// links without a URL stay hidden; email is the headline, the rest sit on one line under it
+// links without a URL stay hidden; email drives the note, the rest sit on one line
 const live = connectLinks.filter((l): l is typeof l & { href: string } => l.href !== null);
 const email = live.find((l) => l.href.startsWith('mailto:'));
 const elsewhere = live.filter((l) => l !== email);
+
+// what a visitor can pick in the sentence; the value becomes the email subject
+const topics = [
+  'a full-time role',
+  'a freelance project',
+  'something on this site',
+  'nothing in particular, just saying hi',
+];
 ---
 
 <section id="connect">
   <h2 class="section t2">Contact</h2>
-  <p class="section-intro">Got something interesting? Email is the fastest way to reach me.</p>
+  <p class="section-intro">Fill in the blanks and your mail app opens with the email already written.</p>
 
   {email && (
-    <div class="mail">
-      <a class="address" href={email.href}>{email.text}</a>
-      <button type="button" class="copy" data-copy={email.text}>
-        Copy<span class="sr-only"> email address</span>
-      </button>
-    </div>
+    <form class="note" data-to={email.text}>
+      <p class="sentence">
+        Hi Vaibhav, I'm
+        <label class="sr-only" for="note-name">Your name</label>
+        <input
+          id="note-name"
+          name="name"
+          autocomplete="name"
+          placeholder="your name"
+          required
+          maxlength="60"
+        />, and I'd like to talk about
+        <label class="sr-only" for="note-topic">Topic</label>
+        <span class="pick">
+          <select id="note-topic" name="topic">
+            {topics.map((t) => <option>{t}</option>)}
+          </select>
+        </span>.
+      </p>
+      <label class="sr-only" for="note-more">Anything else (optional)</label>
+      <textarea id="note-more" name="more" rows="1" maxlength="1200" placeholder="Anything else? (optional)"></textarea>
+
+      <div class="actions">
+        <button type="submit" class="send">
+          Write the email
+          <svg class="plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 3 3 10.5l7 2.5 2.5 7L21 3Z"></path>
+            <path d="m10 13 4.5-4.5"></path>
+          </svg>
+        </button>
+        <span class="or">
+          or write to
+          <a href={email.href}>{email.text}</a>
+          <button type="button" class="copy" data-copy={email.text}>
+            Copy<span class="sr-only"> email address</span>
+          </button>
+        </span>
+      </div>
+
+      <p class="fallback" hidden>
+        Mail app didn't open?
+        <button type="button" class="copy copy-note">Copy the message</button>
+        and paste it into an email to me.
+      </p>
+    </form>
   )}
   <p class="copy-status sr-only" aria-live="polite"></p>
 
@@ -56,31 +103,67 @@ const elsewhere = live.filter((l) => l !== email);
 </section>
 
 <script>
-  const status = document.querySelector<HTMLElement>('#connect .copy-status');
-  for (const btn of document.querySelectorAll<HTMLButtonElement>('#connect .copy')) {
-    const original = btn.firstChild?.textContent ?? 'Copy';
-    btn.addEventListener('click', () => {
-      const value = btn.dataset['copy'];
-      if (!value) return;
-      navigator.clipboard.writeText(value).then(
-        () => {
-          if (btn.firstChild) btn.firstChild.textContent = 'Copied';
-          if (status) status.textContent = 'Email address copied';
-          setTimeout(() => {
-            if (btn.firstChild) btn.firstChild.textContent = original;
-            if (status) status.textContent = '';
-          }, 2000);
-        },
-        () => {
-          if (status) status.textContent = 'Copy failed. Select the address instead.';
-        },
-      );
-    });
+  const root = document.querySelector<HTMLElement>('#connect');
+  const status = root?.querySelector<HTMLElement>('.copy-status');
+  const say = (msg: string) => {
+    if (status) status.textContent = msg;
+  };
+
+  const copy = (btn: HTMLButtonElement, value: string, done: string) => {
+    const label = btn.firstChild;
+    const original = label?.textContent ?? '';
+    navigator.clipboard.writeText(value).then(
+      () => {
+        if (label) label.textContent = 'Copied';
+        say(done);
+        setTimeout(() => {
+          if (label) label.textContent = original;
+          say('');
+        }, 2000);
+      },
+      () => say('Copy failed. Select the text instead.'),
+    );
+  };
+
+  const form = root?.querySelector<HTMLFormElement>('.note');
+  const to = form?.dataset['to'];
+  const compose = () => {
+    if (!form) return { subject: '', body: '' };
+    const data = new FormData(form);
+    const name = String(data.get('name') ?? '').trim();
+    const topic = String(data.get('topic') ?? '');
+    const more = String(data.get('more') ?? '').trim();
+    const subject = `Hi from ${name}, about ${topic.split(',')[0]}`;
+    const body = `Hi Vaibhav, I'm ${name}, and I'd like to talk about ${topic}.` + (more ? `\n\n${more}` : '');
+    return { subject, body };
+  };
+
+  for (const btn of root?.querySelectorAll<HTMLButtonElement>('.copy[data-copy]') ?? []) {
+    btn.addEventListener('click', () => copy(btn, btn.dataset['copy'] ?? '', 'Email address copied'));
   }
 
+  const copyNote = root?.querySelector<HTMLButtonElement>('.copy-note');
+  copyNote?.addEventListener('click', () => {
+    const { subject, body } = compose();
+    copy(copyNote, `${subject}\n\n${body}`, 'Message copied');
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!to) return;
+    const { subject, body } = compose();
+    const plane = form.querySelector('.plane');
+    plane?.classList.remove('fly');
+    void plane?.getBoundingClientRect(); // restart the flight
+    plane?.classList.add('fly');
+    window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const fallback = form.querySelector<HTMLElement>('.fallback');
+    if (fallback) fallback.hidden = false;
+  });
+
   // local time in Bengaluru, so a visitor elsewhere knows when a reply is likely.
-  // Rendered by JS only; without it the line just reads "Bengaluru · remote-friendly".
-  const clock = document.querySelector<HTMLElement>('#connect .clock');
+  // Rendered by JS only; without it the line reads "Bengaluru · remote-friendly".
+  const clock = root?.querySelector<HTMLElement>('.clock');
   const time = clock?.querySelector('time');
   if (clock && time) {
     const fmt = new Intl.DateTimeFormat('en-IN', {
@@ -99,35 +182,175 @@ const elsewhere = live.filter((l) => l !== email);
 </script>
 
 <style>
-  /* the address is the headline: big, in the display face, one obvious thing to do */
-  .mail {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px 18px;
-    margin-top: 4px;
+  /* the note: a sentence with blanks; the blanks are the form */
+  .note {
+    margin-top: 8px;
   }
-  .address {
+  .sentence {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(22px, 5.6vw, 40px);
-    letter-spacing: -0.02em;
-    line-height: 1.15;
+    font-weight: 500;
+    font-size: clamp(21px, 3.4vw, 28px);
+    line-height: 1.7;
+    letter-spacing: -0.01em;
     color: var(--ink);
-    text-decoration: none;
-    overflow-wrap: anywhere;
-    /* resting underline in the control colour; on hover an accent line draws over it */
-    background:
-      linear-gradient(var(--accent), var(--accent)) left bottom / 0% 2px no-repeat,
-      linear-gradient(var(--border-control), var(--border-control)) left bottom / 100% 1px no-repeat;
-    padding-bottom: 4px;
-    transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    margin: 0;
   }
-  .address:hover,
-  .address:focus-visible {
-    background-size:
-      100% 2px,
-      100% 1px;
+  .sentence input,
+  .sentence select,
+  textarea {
+    font: inherit;
+    color: var(--accent-ink);
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px dashed var(--border-control);
+    border-radius: 0;
+    padding: 0 2px;
+    transition: border-color 0.2s;
+  }
+  .sentence input,
+  .pick {
+    margin-inline: 0.25em 0.05em;
+  }
+  .sentence input {
+    field-sizing: content;
+    min-width: 5ch;
+    max-width: 100%;
+  }
+  /* browsers without field-sizing get a fixed blank instead */
+  @supports not (field-sizing: content) {
+    .sentence input {
+      width: 7em;
+    }
+  }
+  .sentence input::placeholder,
+  textarea::placeholder {
+    color: var(--ink-3);
+  }
+  .sentence input:hover,
+  .sentence select:hover,
+  textarea:hover {
+    border-bottom-color: var(--ink-3);
+  }
+  .sentence input:focus-visible,
+  .sentence select:focus-visible,
+  textarea:focus-visible {
+    border-bottom-style: solid;
+    border-bottom-color: var(--accent);
+  }
+  .pick {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+  }
+  .sentence select {
+    appearance: none;
+    max-width: 100%;
+    padding-right: 1.1em;
+    field-sizing: content;
+    cursor: pointer;
+    text-overflow: ellipsis;
+  }
+  .pick::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--ink-3);
+    border-bottom: 1.5px solid var(--ink-3);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+  .sentence select option {
+    color: var(--ink);
+    background: var(--card);
+  }
+  textarea {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    resize: none;
+    field-sizing: content;
+    min-height: 2.2em;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+    margin-top: 24px;
+  }
+  .send {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--bg);
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    padding: 10px 18px;
+    min-height: 44px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .send:hover .plane {
+    transform: translate(2px, -2px);
+  }
+  .send:active {
+    transform: scale(0.98);
+  }
+  .plane {
+    width: 17px;
+    height: 17px;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .plane.fly {
+    animation: fly 0.9s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+  }
+  @keyframes fly {
+    40% {
+      transform: translate(-3px, 3px) rotate(-6deg);
+    }
+    80% {
+      transform: translate(60px, -46px) rotate(10deg);
+      opacity: 0;
+    }
+    81% {
+      transform: translate(-14px, 0);
+      opacity: 0;
+    }
+    100% {
+      transform: none;
+      opacity: 1;
+    }
+  }
+  .or {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font-size: 14px;
+    color: var(--ink-3);
+  }
+  .or a {
+    color: var(--ink-2);
+    text-decoration: underline;
+    text-decoration-color: var(--border-control);
+    text-underline-offset: 4px;
+    overflow-wrap: anywhere;
+  }
+  .or a:hover {
+    color: var(--ink);
+    text-decoration-color: var(--accent);
   }
   .copy {
     font: inherit;
@@ -136,12 +359,24 @@ const elsewhere = live.filter((l) => l !== email);
     background: transparent;
     border: 1px solid var(--border-control);
     border-radius: 6px;
-    padding: 3px 10px;
-    min-height: 28px;
+    padding: 2px 9px;
+    min-height: 26px;
     cursor: pointer;
   }
   .copy:hover {
     color: var(--ink);
+  }
+  .fallback {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    font-size: 14px;
+    color: var(--ink-3);
+    margin: 14px 0 0;
+  }
+  .fallback[hidden] {
+    display: none;
   }
 
   .elsewhere {
@@ -150,7 +385,7 @@ const elsewhere = live.filter((l) => l !== email);
     flex-wrap: wrap;
     gap: 10px 28px;
     padding: 0;
-    margin: 28px 0 0;
+    margin: 36px 0 0;
   }
   .elsewhere a {
     display: inline-flex;
@@ -182,7 +417,7 @@ const elsewhere = live.filter((l) => l !== email);
   }
 
   .status {
-    margin-top: 36px;
+    margin-top: 24px;
     padding-top: 16px;
     border-top: 1px solid var(--rule-2);
     display: flex;
@@ -228,8 +463,10 @@ const elsewhere = live.filter((l) => l !== email);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .address {
+    .plane,
+    .plane.fly {
       transition: none;
+      animation: none;
     }
   }
 </style>
