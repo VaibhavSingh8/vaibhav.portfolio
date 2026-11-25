@@ -6,12 +6,12 @@ const live = connectLinks.filter((l): l is typeof l & { href: string } => l.href
 const email = live.find((l) => l.href.startsWith('mailto:'));
 const elsewhere = live.filter((l) => l !== email);
 
-// what a visitor can pick in the sentence; the value becomes the email subject
+// each option finishes the sentence "...and I'm ___."; `subject` heads the email
 const topics = [
-  'a full-time role',
-  'a freelance project',
-  'something on this site',
-  'nothing in particular, just saying hi',
+  { say: 'hiring for a full-time role', subject: 'A full-time role' },
+  { say: 'looking for help with a project', subject: 'A project' },
+  { say: 'curious about something on this site', subject: 'Something on your site' },
+  { say: 'just saying hi', subject: 'Just saying hi' },
 ];
 ---
 
@@ -22,7 +22,7 @@ const topics = [
   {email && (
     <form class="note" data-to={email.text}>
       <p class="sentence">
-        Hi Vaibhav, I'm
+        Hi Vaibhav, this is
         <label class="sr-only" for="note-name">Your name</label>
         <input
           id="note-name"
@@ -31,11 +31,11 @@ const topics = [
           placeholder="your name"
           required
           maxlength="60"
-        />, and I'd like to talk about
-        <label class="sr-only" for="note-topic">Topic</label>
+        />, and I'm
+        <label class="sr-only" for="note-topic">Why you're writing</label>
         <span class="pick">
           <select id="note-topic" name="topic">
-            {topics.map((t) => <option>{t}</option>)}
+            {topics.map((t) => <option value={t.subject}>{t.say}</option>)}
           </select>
         </span>.
       </p>
@@ -132,9 +132,10 @@ const topics = [
     const data = new FormData(form);
     const name = String(data.get('name') ?? '').trim();
     const topic = String(data.get('topic') ?? '');
+    const say = form.querySelector<HTMLSelectElement>('select')?.selectedOptions[0]?.text ?? '';
     const more = String(data.get('more') ?? '').trim();
-    const subject = `Hi from ${name}, about ${topic.split(',')[0]}`;
-    const body = `Hi Vaibhav, I'm ${name}, and I'd like to talk about ${topic}.` + (more ? `\n\n${more}` : '');
+    const subject = `${topic} (from ${name})`;
+    const body = `Hi Vaibhav, this is ${name}, and I'm ${say}.` + (more ? `\n\n${more}` : '');
     return { subject, body };
   };
 
@@ -213,7 +214,7 @@ const topics = [
   }
   .sentence input {
     field-sizing: content;
-    min-width: 5ch;
+    min-width: 1ch;
     max-width: 100%;
   }
   /* browsers without field-sizing get a fixed blank instead */
