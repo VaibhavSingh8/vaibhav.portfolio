@@ -1,51 +1,58 @@
 ---
 import { connectLinks } from '../data/connect.ts';
 
-// email first, then the rest in data order; links without a URL stay hidden
-const links = connectLinks
-  .filter((l): l is typeof l & { href: string } => l.href !== null)
-  .sort((a, b) => Number(b.href.startsWith('mailto:')) - Number(a.href.startsWith('mailto:')));
+// links without a URL stay hidden; email is the headline, the rest sit on one line under it
+const live = connectLinks.filter((l): l is typeof l & { href: string } => l.href !== null);
+const email = live.find((l) => l.href.startsWith('mailto:'));
+const elsewhere = live.filter((l) => l !== email);
 ---
 
 <section id="connect">
   <h2 class="section t2">Contact</h2>
-  <p class="section-intro">Email is the fastest way to reach me.</p>
+  <p class="section-intro">Got something interesting? Email is the fastest way to reach me.</p>
 
-  <ul class="channels">
-    {links.map(({ label, text, href, paths, filled }) => {
-      const isEmail = href.startsWith('mailto:');
-      return (
+  {email && (
+    <div class="mail">
+      <a class="address" href={email.href}>{email.text}</a>
+      <button type="button" class="copy" data-copy={email.text}>
+        Copy<span class="sr-only"> email address</span>
+      </button>
+    </div>
+  )}
+  <p class="copy-status sr-only" aria-live="polite"></p>
+
+  {elsewhere.length > 0 && (
+    <ul class="elsewhere" aria-label="Elsewhere">
+      {elsewhere.map(({ label, text, href, paths, filled }) => (
         <li>
-          <span class="label">
+          <a href={href} rel="me noopener">
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
               fill={filled ? 'currentColor' : 'none'}
               stroke={filled ? 'none' : 'currentColor'}
               stroke-width={filled ? undefined : '2'}
+              stroke-linecap="round"
+              stroke-linejoin="round"
             >
               {paths.map((d) => <path d={d} />)}
             </svg>
-            {label}
-          </span>
-          <span class="value">
-            <a href={href} rel={isEmail ? undefined : 'me noopener'}>{text}</a>
-            {isEmail && (
-              <button type="button" class="copy" data-copy={text}>
-                Copy<span class="sr-only"> email address</span>
-              </button>
-            )}
-          </span>
+            <span class="sr-only">{label}: </span>{text}
+          </a>
         </li>
-      );
-    })}
-  </ul>
-  <p class="copy-status sr-only" aria-live="polite"></p>
+      ))}
+    </ul>
+  )}
 
-  <p class="availability">
-    <span class="dot" aria-hidden="true"></span>
-    Open to interesting work · Bengaluru, remote-friendly · usually replies within a day
-  </p>
+  <div class="status">
+    <p class="availability">
+      <span class="dot" aria-hidden="true"></span>
+      Open to interesting work. Usually replies within a day.
+    </p>
+    <p class="where">
+      Bengaluru<span class="clock" hidden>, <time></time></span> · remote-friendly
+    </p>
+  </div>
 </section>
 
 <script>
@@ -70,59 +77,57 @@ const links = connectLinks
       );
     });
   }
+
+  // local time in Bengaluru, so a visitor elsewhere knows when a reply is likely.
+  // Rendered by JS only; without it the line just reads "Bengaluru · remote-friendly".
+  const clock = document.querySelector<HTMLElement>('#connect .clock');
+  const time = clock?.querySelector('time');
+  if (clock && time) {
+    const fmt = new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+    const tick = () => {
+      time.textContent = fmt.format(new Date()).toLowerCase() + ' IST';
+    };
+    tick();
+    clock.hidden = false;
+    setInterval(tick, 30_000);
+  }
 </script>
 
 <style>
-  /* one grid, rows on subgrid, so labels and values line up across channels */
-  .channels {
-    list-style: none;
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    column-gap: 32px;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid var(--rule);
-  }
-  .channels li {
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-column: 1 / -1;
-    align-items: center;
-    min-height: 52px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--rule);
-  }
-  .label {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    color: var(--ink-3);
-  }
-  .label svg {
-    width: 15px;
-    height: 15px;
-  }
-  .value {
+  /* the address is the headline: big, in the display face, one obvious thing to do */
+  .mail {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px 14px;
-    min-width: 0;
+    gap: 12px 18px;
+    margin-top: 4px;
   }
-  .value a {
-    font-size: 17px;
-    font-weight: 500;
+  .address {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(22px, 5.6vw, 40px);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
     color: var(--ink);
-    text-decoration: underline;
-    text-decoration-color: var(--border-control);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 5px;
+    text-decoration: none;
     overflow-wrap: anywhere;
-    transition: text-decoration-color 0.2s;
+    /* resting underline in the control colour; on hover an accent line draws over it */
+    background:
+      linear-gradient(var(--accent), var(--accent)) left bottom / 0% 2px no-repeat,
+      linear-gradient(var(--border-control), var(--border-control)) left bottom / 100% 1px no-repeat;
+    padding-bottom: 4px;
+    transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .value a:hover {
-    text-decoration-color: var(--accent);
+  .address:hover,
+  .address:focus-visible {
+    background-size:
+      100% 2px,
+      100% 1px;
   }
   .copy {
     font: inherit;
@@ -138,13 +143,70 @@ const links = connectLinks
   .copy:hover {
     color: var(--ink);
   }
+
+  .elsewhere {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    padding: 0;
+    margin: 28px 0 0;
+  }
+  .elsewhere a {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 28px;
+    font-size: 15px;
+    color: var(--ink-2);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 5px;
+    transition:
+      color 0.2s,
+      text-decoration-color 0.2s;
+  }
+  .elsewhere a:hover {
+    color: var(--ink);
+    text-decoration-color: var(--border-control);
+  }
+  .elsewhere svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--ink-3);
+    transition: color 0.2s;
+  }
+  .elsewhere a:hover svg {
+    color: var(--ink);
+  }
+
+  .status {
+    margin-top: 36px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-2);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px 24px;
+  }
   .availability {
     display: flex;
     align-items: baseline;
     gap: 10px;
     font-size: 14px;
+    color: var(--ink-2);
+    margin: 0;
+  }
+  .where {
+    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--ink-3);
-    margin: 20px 0 0;
+    margin: 0;
+  }
+  .where time {
+    font-variant-numeric: tabular-nums;
   }
   .dot {
     flex: none;
@@ -165,12 +227,9 @@ const links = connectLinks
       box-shadow: 0 0 0 6px transparent;
     }
   }
-  @media (max-width: 480px) {
-    .channels {
-      column-gap: 20px;
-    }
-    .value a {
-      font-size: 16px;
+  @media (prefers-reduced-motion: reduce) {
+    .address {
+      transition: none;
     }
   }
 </style>

@@ -52,7 +52,7 @@ src/
 | `Experience.astro` | Work history rows as `<details>`/`<summary>`, closed by default |
 | `About.astro` | Two bio paragraphs, then the education line |
 | `Stack.astro` | Two-row marquee carousel + pause control |
-| `Connect.astro` | Contact: one aligned list of channels (email first, with a copy button), availability line with pulse dot |
+| `Connect.astro` | Contact: the email address as a large display link with a copy button, the other channels on one line under it, then availability (pulse dot) and live Bengaluru time |
 | `Footer.astro` | Copyright + the pixel cat: a button that cycles through real outside-work scenes with a caption |
 | `ValidatorDemo.astro` | Interactive demo, mounted into `<div data-demo="validator">` in case study markdown |
 
@@ -93,7 +93,7 @@ Each script is imported by exactly one component (or Layout):
 - Translucent surfaces: `--nav-bg`, `--overlay-bg`, `--card-soft`. Also `--live`, `--live-ring`, `--shadow`, `--hatch`, `--grid-dot`.
 - Layout: `--measure` (the one column — nav, main and footer all align to it), `--gutter`, `--frame-inset` (derived from `--measure`; the page rules sit on the column edges).
 - Typography lives in three CSS vars, never hardcode a font string in a component: `--font-sans` (Inter — body copy, labels), `--font-mono` (IBM Plex Mono — meta text, tags, terminal-style bits), `--font-display` (Bricolage Grotesque — section headers, hero name, section and case study titles).
-- For a repeated-row layout that needs columns to align across rows (see `About.astro`'s `.facts` list or `Connect.astro`'s `.channels`), make the parent `display: grid` with the real column tracks and give each row `grid-template-columns: subgrid; grid-column: 1 / -1`. Do not give each row its own independent `grid-template-columns` — the tracks size per-row instead of sharing one layout, which misaligns content across rows.
+- For a repeated-row layout that needs columns to align across rows (see `About.astro`'s `.facts` list), make the parent `display: grid` with the real column tracks and give each row `grid-template-columns: subgrid; grid-column: 1 / -1`. Do not give each row its own independent `grid-template-columns` — the tracks size per-row instead of sharing one layout, which misaligns content across rows.
 
 ### Design
 
